@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "hdiamond",
+  "version": "${version}",
+  "name": "Hazard Diamond",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/hdiamond/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.acikek.hdiamond.client.HDiamondClient"
+    ],
+    "main": [
+      "com.acikek.hdiamond.HDiamond"
+    ]
+  },
+  "mixins": [
+    "hdiamond.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric": "*",
+    "minecraft": "1.19.2"
+  }
+}
