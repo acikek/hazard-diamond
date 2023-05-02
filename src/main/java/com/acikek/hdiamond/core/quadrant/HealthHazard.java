@@ -27,7 +27,7 @@ public enum HealthHazard implements HazardQuadrant {
     DEADLY;
 
     @Override
-    public Placement getPlacement() {
-        return Placement.numeral(1, ordinal());
+    public Texture getTexture() {
+        return Texture.numeral(1, ordinal());
     }
 }

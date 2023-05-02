@@ -3,6 +3,7 @@ package com.acikek.hdiamond.core;
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.core.quadrant.*;
 import com.google.gson.JsonObject;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity reactivity, SpecificHazard specific) {
@@ -14,6 +15,21 @@ public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity rea
         var health = HazardQuadrant.fromJson(obj.get("health"), HealthHazard.class);
         var reactivity = HazardQuadrant.fromJson(obj.get("reactivity"), Reactivity.class);
         var specific = HazardQuadrant.fromJson(obj.get("specific"), SpecificHazard.class);
+        return new HazardDiamond(fire, health, reactivity, specific);
+    }
+
+    public void write(PacketByteBuf buf) {
+        buf.writeEnumConstant(fire);
+        buf.writeEnumConstant(health);
+        buf.writeEnumConstant(reactivity);
+        buf.writeEnumConstant(specific);
+    }
+
+    public static HazardDiamond read(PacketByteBuf buf) {
+        var fire = buf.readEnumConstant(FireHazard.class);
+        var health = buf.readEnumConstant(HealthHazard.class);
+        var reactivity = buf.readEnumConstant(Reactivity.class);
+        var specific = buf.readEnumConstant(SpecificHazard.class);
         return new HazardDiamond(fire, health, reactivity, specific);
     }
 }

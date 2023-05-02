@@ -7,14 +7,14 @@ import org.apache.commons.lang3.EnumUtils;
 
 public interface HazardQuadrant {
 
-    record Placement(int u, int v, int width, int height) {
+    record Texture(int u, int v, int width, int height) {
 
-        public static Placement numeral(int row, int index) {
-            return new Placement(65 + index * 12, 14 * row, 12, 14);
+        public static Texture numeral(int row, int index) {
+            return new Texture(64 + index * 12, 14 * row, 12, 14);
         }
     }
 
-    Placement getPlacement();
+    Texture getTexture();
 
     static <E extends Enum<E>> E fromJson(JsonElement element, Class<E> clazz) {
         JsonPrimitive primitive = element != null

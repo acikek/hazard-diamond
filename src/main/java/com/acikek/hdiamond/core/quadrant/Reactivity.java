@@ -29,7 +29,7 @@ public enum Reactivity implements HazardQuadrant {
     READILY_DETONATES;
 
     @Override
-    public Placement getPlacement() {
-        return Placement.numeral(2, ordinal());
+    public Texture getTexture() {
+        return Texture.numeral(2, ordinal());
     }
 }

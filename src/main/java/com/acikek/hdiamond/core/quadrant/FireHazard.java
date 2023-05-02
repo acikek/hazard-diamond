@@ -32,7 +32,7 @@ public enum FireHazard implements HazardQuadrant {
     BELOW_25C;
 
     @Override
-    public Placement getPlacement() {
-        return Placement.numeral(0, ordinal());
+    public Texture getTexture() {
+        return Texture.numeral(0, ordinal());
     }
 }

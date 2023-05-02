@@ -6,13 +6,13 @@ package com.acikek.hdiamond.core.quadrant;
  */
 public enum SpecificHazard implements HazardQuadrant {
     /**
-     * Allows chemicals to burn without air supply.
-     */
-    OXIDIZER,
-    /**
      * Reacts with water in an unusual or dangerous manner.
      */
     REACTS_WITH_WATER,
+    /**
+     * Allows chemicals to burn without air supply.
+     */
+    OXIDIZER,
     /**
      * Denotes a "simple asphyxiant gas," or one that alters the normal oxygen concentration in breathable air.
      */
@@ -23,9 +23,9 @@ public enum SpecificHazard implements HazardQuadrant {
     RADIOACTIVE;
 
     @Override
-    public Placement getPlacement() {
+    public Texture getTexture() {
         return this == RADIOACTIVE
-                ? new Placement(256 - 20, 256 - 20, 20, 20)
-                : new Placement(65 + ordinal() * 14, 42, 18, 14);
+                ? new Texture(256 - 20, 256, 20, 20)
+                : new Texture(64 + ordinal() * 18, 42, 18, 14);
     }
 }
