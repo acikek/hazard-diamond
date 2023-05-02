@@ -1,10 +1,12 @@
 package com.acikek.hdiamond.core.quadrant;
 
+import com.acikek.hdiamond.core.TexturedElement;
+
 /**
  * Describes the susceptibiltiy of a material to release energy.<br>
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
-public enum Reactivity implements HazardQuadrant {
+public enum Reactivity implements TexturedElement {
     /**
      * Normally stable, even under fire exposure conditions, and not reactive with water.
      */
@@ -29,7 +31,7 @@ public enum Reactivity implements HazardQuadrant {
     READILY_DETONATES;
 
     @Override
-    public Texture getTexture() {
-        return Texture.numeral(2, ordinal());
+    public Result getTexture() {
+        return Result.numeral(2, ordinal());
     }
 }

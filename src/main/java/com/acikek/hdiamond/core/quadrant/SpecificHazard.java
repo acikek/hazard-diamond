@@ -1,10 +1,12 @@
 package com.acikek.hdiamond.core.quadrant;
 
+import com.acikek.hdiamond.core.TexturedElement;
+
 /**
  * Describes special hazards pertaining to a material.
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
-public enum SpecificHazard implements HazardQuadrant {
+public enum SpecificHazard implements TexturedElement {
     /**
      * Reacts with water in an unusual or dangerous manner.
      */
@@ -23,9 +25,9 @@ public enum SpecificHazard implements HazardQuadrant {
     RADIOACTIVE;
 
     @Override
-    public Texture getTexture() {
+    public Result getTexture() {
         return this == RADIOACTIVE
-                ? new Texture(256 - 20, 256, 20, 20)
-                : new Texture(64 + ordinal() * 18, 42, 18, 14);
+                ? new Result(256 - 20, 256, 20, 20)
+                : new Result(64 + ordinal() * 18, 42, 18, 14);
     }
 }

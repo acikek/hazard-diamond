@@ -1,10 +1,12 @@
 package com.acikek.hdiamond.core.quadrant;
 
+import com.acikek.hdiamond.core.TexturedElement;
+
 /**
  * Describes the susceptibility of materials to burn.<br>
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
-public enum FireHazard implements HazardQuadrant {
+public enum FireHazard implements TexturedElement {
     /**
      * Will not burn.
      */
@@ -32,7 +34,7 @@ public enum FireHazard implements HazardQuadrant {
     BELOW_25C;
 
     @Override
-    public Texture getTexture() {
-        return Texture.numeral(0, ordinal());
+    public Result getTexture() {
+        return Result.numeral(0, ordinal());
     }
 }
