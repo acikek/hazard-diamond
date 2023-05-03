@@ -8,6 +8,10 @@ import com.acikek.hdiamond.core.TexturedElement;
  */
 public enum SpecificHazard implements TexturedElement {
     /**
+     * No specific hazard to denote.
+     */
+    NONE,
+    /**
      * Reacts with water in an unusual or dangerous manner.
      */
     REACTS_WITH_WATER,
@@ -28,6 +32,6 @@ public enum SpecificHazard implements TexturedElement {
     public Result getTexture() {
         return this == RADIOACTIVE
                 ? new Result(256 - 20, 256, 20, 20)
-                : new Result(64 + ordinal() * 18, 42, 18, 14);
+                : new Result(64 + (ordinal() - 1) * 18, 42, 18, 14);
     }
 }

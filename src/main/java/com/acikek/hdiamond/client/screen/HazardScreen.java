@@ -48,13 +48,14 @@ public class HazardScreen extends Screen {
     }
 
     public void renderQuadrants(MatrixStack matrices) {
-        renderElement(matrices, data.diamond().fire(), x + 26, y - 41);
-        renderElement(matrices, data.diamond().health(), x + 10, y - 25);
-        renderElement(matrices, data.diamond().reactivity(), x + 42, y - 25);
-        data.diamond().specific().ifPresent(specific -> {
+        renderElement(matrices, data.diamond().fire().get(), x + 26, y - 41);
+        renderElement(matrices, data.diamond().health().get(), x + 10, y - 25);
+        renderElement(matrices, data.diamond().reactivity().get(), x + 42, y - 25);
+        SpecificHazard specific = data.diamond().specific().get();
+        if (specific != SpecificHazard.NONE) {
             var rad = specific == SpecificHazard.RADIOACTIVE;
             renderElement(matrices, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
-        });
+        }
     }
 
     public void renderPictogram(MatrixStack matrices, Pictogram pictogram, int x, int y) {
