@@ -1,24 +1,11 @@
 package com.acikek.hdiamond;
 
-import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.command.HDiamondCommand;
-import com.acikek.hdiamond.core.HazardDiamond;
-import com.acikek.hdiamond.core.pictogram.Pictogram;
-import com.acikek.hdiamond.core.quadrant.FireHazard;
-import com.acikek.hdiamond.core.quadrant.HealthHazard;
-import com.acikek.hdiamond.core.quadrant.Reactivity;
+import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.entity.PanelEntity;
 import com.acikek.hdiamond.item.PanelItem;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
-import java.util.Optional;
 
 public class HDiamond implements ModInitializer {
 
@@ -31,6 +18,7 @@ public class HDiamond implements ModInitializer {
     @Override
     public void onInitialize() {
         HDiamondCommand.register();
+        HazardData.registerTrackedData();
         PanelEntity.register();
         PanelItem.register();
 

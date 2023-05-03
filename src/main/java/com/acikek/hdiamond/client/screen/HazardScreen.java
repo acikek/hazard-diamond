@@ -1,7 +1,7 @@
 package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
-import com.acikek.hdiamond.core.HazardDiamond;
+import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.TexturedElement;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
@@ -12,8 +12,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public class HazardScreen extends Screen {
 
     public static final Identifier TEXTURE = HDiamond.id("textures/gui/hazards.png");
@@ -21,13 +19,11 @@ public class HazardScreen extends Screen {
     public int x;
     public int y;
 
-    public HazardDiamond diamond;
-    public List<Pictogram> pictograms;
+    public HazardData data;
 
-    public HazardScreen(Text title, HazardDiamond diamond, List<Pictogram> pictograms) {
+    public HazardScreen(Text title, HazardData data) {
         super(title);
-        this.diamond = diamond;
-        this.pictograms = pictograms;
+        this.data = data;
     }
 
     @Override
@@ -52,17 +48,17 @@ public class HazardScreen extends Screen {
     }
 
     public void renderQuadrants(MatrixStack matrices) {
-        renderElement(matrices, diamond.fire(), x + 26, y - 41);
-        renderElement(matrices, diamond.health(), x + 10, y - 25);
-        renderElement(matrices, diamond.reactivity(), x + 42, y - 25);
-        diamond.specific().ifPresent(specific -> {
+        renderElement(matrices, data.diamond().fire(), x + 26, y - 41);
+        renderElement(matrices, data.diamond().health(), x + 10, y - 25);
+        renderElement(matrices, data.diamond().reactivity(), x + 42, y - 25);
+        data.diamond().specific().ifPresent(specific -> {
             var rad = specific == SpecificHazard.RADIOACTIVE;
             renderElement(matrices, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
         });
     }
 
     public void renderPictogram(MatrixStack matrices, Pictogram pictogram, int x, int y) {
-        float color = pictograms.contains(pictogram) ? 1.0f : 0.6f;
+        float color = data.pictograms().contains(pictogram) ? 1.0f : 0.6f;
         RenderSystem.setShaderColor(color, color, color, 1.0f);
         renderElement(matrices, pictogram, x, y);
     }
