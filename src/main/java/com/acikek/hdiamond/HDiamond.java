@@ -1,6 +1,6 @@
 package com.acikek.hdiamond;
 
-import com.acikek.hdiamond.client.HazardScreen;
+import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.command.HDiamondCommand;
 import com.acikek.hdiamond.core.HazardDiamond;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
@@ -16,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.Optional;
 
 public class HDiamond implements ModInitializer {
 
@@ -31,7 +32,7 @@ public class HDiamond implements ModInitializer {
 
         UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient()) {
-                var d = new HazardDiamond(FireHazard.BELOW_25C, HealthHazard.EXTREME, Reactivity.STABLE, SpecificHazard.OXIDIZER);
+                var d = new HazardDiamond(FireHazard.BELOW_25C, HealthHazard.EXTREME, Reactivity.STABLE, Optional.empty());
                 MinecraftClient.getInstance().setScreen(new HazardScreen(Text.empty(), d, List.of(Pictogram.EXPLOSIVE, Pictogram.TOXIC, Pictogram.CORROSIVE)));
             }
             return ActionResult.PASS;

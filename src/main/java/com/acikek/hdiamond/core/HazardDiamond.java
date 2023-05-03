@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity reactivity, SpecificHazard specific) {
+import java.util.Optional;
+
+public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity reactivity, Optional<SpecificHazard> specific) {
 
     public static final Identifier PANEL = HDiamond.id("textures/hazard/diamond/panel.png");
 
@@ -14,7 +16,9 @@ public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity rea
         var fire = TexturedElement.fromJson(obj.get("fire"), FireHazard.class);
         var health = TexturedElement.fromJson(obj.get("health"), HealthHazard.class);
         var reactivity = TexturedElement.fromJson(obj.get("reactivity"), Reactivity.class);
-        var specific = TexturedElement.fromJson(obj.get("specific"), SpecificHazard.class);
+        Optional<SpecificHazard> specific = obj.has("specific")
+                ? Optional.of(TexturedElement.fromJson(obj.get("specific"), SpecificHazard.class))
+                : Optional.empty();
         return new HazardDiamond(fire, health, reactivity, specific);
     }
 
@@ -22,14 +26,14 @@ public record HazardDiamond(FireHazard fire, HealthHazard health, Reactivity rea
         buf.writeEnumConstant(fire);
         buf.writeEnumConstant(health);
         buf.writeEnumConstant(reactivity);
-        buf.writeEnumConstant(specific);
+        buf.writeOptional(specific, PacketByteBuf::writeEnumConstant);
     }
 
     public static HazardDiamond read(PacketByteBuf buf) {
         var fire = buf.readEnumConstant(FireHazard.class);
         var health = buf.readEnumConstant(HealthHazard.class);
         var reactivity = buf.readEnumConstant(Reactivity.class);
-        var specific = buf.readEnumConstant(SpecificHazard.class);
+        var specific = buf.readOptional(b -> b.readEnumConstant(SpecificHazard.class));
         return new HazardDiamond(fire, health, reactivity, specific);
     }
 

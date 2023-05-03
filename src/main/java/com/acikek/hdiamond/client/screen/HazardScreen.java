@@ -1,9 +1,9 @@
-package com.acikek.hdiamond.client;
+package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.core.HazardDiamond;
-import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.TexturedElement;
+import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
@@ -55,8 +55,10 @@ public class HazardScreen extends Screen {
         renderElement(matrices, diamond.fire(), x + 26, y - 41);
         renderElement(matrices, diamond.health(), x + 10, y - 25);
         renderElement(matrices, diamond.reactivity(), x + 42, y - 25);
-        var rad = diamond.specific() == SpecificHazard.RADIOACTIVE;
-        renderElement(matrices, diamond.specific(), x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
+        diamond.specific().ifPresent(specific -> {
+            var rad = specific == SpecificHazard.RADIOACTIVE;
+            renderElement(matrices, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
+        });
     }
 
     public void renderPictogram(MatrixStack matrices, Pictogram pictogram, int x, int y) {
