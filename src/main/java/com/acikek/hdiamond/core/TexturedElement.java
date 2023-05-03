@@ -16,7 +16,7 @@ public interface TexturedElement {
 
     Result getTexture();
 
-    static <E extends Enum<E>> E fromJson(JsonElement element, Class<E> clazz) {
+    static <E extends Enum<E>> E quadrantsFromJson(JsonElement element, Class<E> clazz) {
         JsonPrimitive primitive = element != null
                 ? element.getAsJsonPrimitive()
                 : null;

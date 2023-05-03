@@ -1,5 +1,6 @@
 package com.acikek.hdiamond.client;
 
+import com.acikek.hdiamond.client.render.PanelEntityRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -9,6 +10,6 @@ public class HDiamondClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
+        PanelEntityRenderer.register();
     }
 }

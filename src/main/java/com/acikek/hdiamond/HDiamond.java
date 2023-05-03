@@ -7,8 +7,10 @@ import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.FireHazard;
 import com.acikek.hdiamond.core.quadrant.HealthHazard;
 import com.acikek.hdiamond.core.quadrant.Reactivity;
-import com.acikek.hdiamond.core.quadrant.SpecificHazard;
+import com.acikek.hdiamond.entity.PanelEntity;
+import com.acikek.hdiamond.item.PanelItem;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -29,13 +31,15 @@ public class HDiamond implements ModInitializer {
     @Override
     public void onInitialize() {
         HDiamondCommand.register();
+        PanelEntity.register();
+        PanelItem.register();
 
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+        /*UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
             if (world.isClient()) {
                 var d = new HazardDiamond(FireHazard.BELOW_25C, HealthHazard.EXTREME, Reactivity.STABLE, Optional.empty());
                 MinecraftClient.getInstance().setScreen(new HazardScreen(Text.empty(), d, List.of(Pictogram.EXPLOSIVE, Pictogram.TOXIC, Pictogram.CORROSIVE)));
             }
             return ActionResult.PASS;
-        });
+        });*/
     }
 }
