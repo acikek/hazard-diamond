@@ -112,6 +112,7 @@ public class PanelEntity extends AbstractDecorationEntity {
             return;
         }
         getDataTracker().set(HAZARD_DATA, data);
+        playSound(SoundEvents.BLOCK_SMITHING_TABLE_USE, 1.0f, 1.0f);
     }
 
     @Override

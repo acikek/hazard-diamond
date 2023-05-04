@@ -2,7 +2,7 @@ package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.core.HazardData;
-import com.acikek.hdiamond.core.TexturedElement;
+import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.entity.PanelEntity;
@@ -36,6 +36,8 @@ public class HazardScreen extends Screen {
     protected void init() {
         this.x = (this.width - 128) / 4;
         this.y = (this.height) / 4 - 2;
+        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().health(), x * 2 + 1, y * 2 - 67, 62, 62));
+        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().reactivity(), x * 2 + 65, y * 2 - 67, 62, 62));
     }
 
     public static void setTexture() {
@@ -48,7 +50,7 @@ public class HazardScreen extends Screen {
         drawTexture(matrices, x, y - 50, 0, 0, 64, 64);
     }
 
-    public void renderElement(MatrixStack matrices, TexturedElement element, int x, int y) {
+    public void renderElement(MatrixStack matrices, DiamondSection<?> element, int x, int y) {
         var texture = element.getTexture();
         drawTexture(matrices, x, y, texture.u(), texture.v(), texture.width(), texture.height());
     }
@@ -87,11 +89,11 @@ public class HazardScreen extends Screen {
         renderQuadrants(matrices);
         renderPictograms(matrices);
         matrices.pop();
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        data.diamond().fire().scroll();
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

@@ -1,11 +1,13 @@
 package com.acikek.hdiamond.core.quadrant;
 
-public class HazardQuadrant<E extends Enum<E>> {
+import com.acikek.hdiamond.core.section.QuadrantSection;
+
+public class QuadrantValue<E extends Enum<E> & QuadrantSection<E>> {
 
     private final Class<E> enumClass;
     private E value;
 
-    public HazardQuadrant(Class<E> enumClass, E value) {
+    public QuadrantValue(Class<E> enumClass, E value) {
         this.enumClass = enumClass;
         this.value = value;
     }
@@ -21,7 +23,7 @@ public class HazardQuadrant<E extends Enum<E>> {
         return value;
     }
 
-    public HazardQuadrant<E> copy() {
-        return new HazardQuadrant<>(enumClass, value);
+    public QuadrantValue<E> copy() {
+        return new QuadrantValue<>(enumClass, value);
     }
 }

@@ -1,12 +1,13 @@
 package com.acikek.hdiamond.core.quadrant;
 
-import com.acikek.hdiamond.core.TexturedElement;
+import com.acikek.hdiamond.core.section.QuadrantSection;
+import net.minecraft.util.Formatting;
 
 /**
  * Describes the type of possible injury while handling materials.<br>
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
-public enum HealthHazard implements TexturedElement {
+public enum HealthHazard implements QuadrantSection<HealthHazard> {
     /**
      * On exposure under fire conditions, offers no hazard beyond that of ordinary combustible materials.
      */
@@ -29,7 +30,22 @@ public enum HealthHazard implements TexturedElement {
     DEADLY;
 
     @Override
-    public Result getTexture() {
-        return Result.numeral(1, ordinal());
+    public HealthHazard getValue() {
+        return this;
+    }
+
+    @Override
+    public Texture getTexture() {
+        return Texture.numeral(1, ordinal());
+    }
+
+    @Override
+    public String getType() {
+        return "quadrant.hdiamond.health";
+    }
+
+    @Override
+    public Formatting getTypeColor() {
+        return Formatting.BLUE;
     }
 }

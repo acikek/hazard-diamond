@@ -1,15 +1,16 @@
 package com.acikek.hdiamond.core;
 
 import com.acikek.hdiamond.core.quadrant.*;
+import com.acikek.hdiamond.core.section.DiamondSection;
 import com.google.gson.JsonObject;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 
 public record HazardDiamond(
-        HazardQuadrant<FireHazard> fire,
-        HazardQuadrant<HealthHazard> health,
-        HazardQuadrant<Reactivity> reactivity,
-        HazardQuadrant<SpecificHazard> specific) {
+        QuadrantValue<FireHazard> fire,
+        QuadrantValue<HealthHazard> health,
+        QuadrantValue<Reactivity> reactivity,
+        QuadrantValue<SpecificHazard> specific) {
 
     public static HazardDiamond empty() {
         return new HazardDiamond(FireHazard.INFLAMMABLE, HealthHazard.NORMAL, Reactivity.STABLE, SpecificHazard.NONE);
@@ -17,19 +18,19 @@ public record HazardDiamond(
 
     public HazardDiamond(FireHazard fire, HealthHazard health, Reactivity reactivity, SpecificHazard specific) {
         this(
-                new HazardQuadrant<>(FireHazard.class, fire),
-                new HazardQuadrant<>(HealthHazard.class, health),
-                new HazardQuadrant<>(Reactivity.class, reactivity),
-                new HazardQuadrant<>(SpecificHazard.class, specific)
+                new QuadrantValue<>(FireHazard.class, fire),
+                new QuadrantValue<>(HealthHazard.class, health),
+                new QuadrantValue<>(Reactivity.class, reactivity),
+                new QuadrantValue<>(SpecificHazard.class, specific)
         );
     }
 
     public static HazardDiamond fromJson(JsonObject obj) {
-        var fire = TexturedElement.quadrantsFromJson(obj.get("fire"), FireHazard.class);
-        var health = TexturedElement.quadrantsFromJson(obj.get("health"), HealthHazard.class);
-        var reactivity = TexturedElement.quadrantsFromJson(obj.get("reactivity"), Reactivity.class);
+        var fire = DiamondSection.quadrantsFromJson(obj.get("fire"), FireHazard.class);
+        var health = DiamondSection.quadrantsFromJson(obj.get("health"), HealthHazard.class);
+        var reactivity = DiamondSection.quadrantsFromJson(obj.get("reactivity"), Reactivity.class);
         var specific = obj.has("specific")
-                ? TexturedElement.quadrantsFromJson(obj.get("specific"), SpecificHazard.class)
+                ? DiamondSection.quadrantsFromJson(obj.get("specific"), SpecificHazard.class)
                 : SpecificHazard.NONE;
         return new HazardDiamond(fire, health, reactivity, specific);
     }

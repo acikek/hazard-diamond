@@ -1,20 +1,43 @@
-package com.acikek.hdiamond.core;
+package com.acikek.hdiamond.core.section;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.apache.commons.lang3.EnumUtils;
 
-public interface TexturedElement {
+public interface DiamondSection<E extends Enum<E>> {
 
-    record Result(int u, int v, int width, int height) {
+    record Texture(int u, int v, int width, int height) {
 
-        public static Result numeral(int row, int index) {
-            return new Result(64 + index * 12, 14 * row, 12, 14);
+        public static Texture numeral(int row, int index) {
+            return new Texture(64 + index * 12, 14 * row, 12, 14);
         }
     }
 
-    Result getTexture();
+    E getValue();
+
+    Texture getTexture();
+
+    String getType();
+
+    default MutableText getText(String suffix) {
+        return Text.translatable(getType() + "." + suffix);
+    }
+
+    default MutableText getSpecificText(String suffix) {
+        return getText(getValue().name().toLowerCase() + "." + suffix);
+    }
+
+    default MutableText getTitle() {
+        return getSpecificText("name");
+    }
+
+    default MutableText getDescription() {
+        return getSpecificText("description");
+    }
 
     static <E extends Enum<E>> E quadrantsFromJson(JsonElement element, Class<E> clazz) {
         JsonPrimitive primitive = element != null

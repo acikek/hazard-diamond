@@ -1,12 +1,13 @@
 package com.acikek.hdiamond.core.quadrant;
 
-import com.acikek.hdiamond.core.TexturedElement;
+import com.acikek.hdiamond.core.section.QuadrantSection;
+import net.minecraft.util.Formatting;
 
 /**
  * Describes the susceptibility of materials to burn.<br>
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
-public enum FireHazard implements TexturedElement {
+public enum FireHazard implements QuadrantSection<FireHazard> {
     /**
      * Will not burn.
      */
@@ -34,7 +35,22 @@ public enum FireHazard implements TexturedElement {
     BELOW_25C;
 
     @Override
-    public Result getTexture() {
-        return Result.numeral(0, ordinal());
+    public FireHazard getValue() {
+        return this;
+    }
+
+    @Override
+    public Texture getTexture() {
+        return Texture.numeral(0, ordinal());
+    }
+
+    @Override
+    public String getType() {
+        return "quadrant.hdiamond.fire";
+    }
+
+    @Override
+    public Formatting getTypeColor() {
+        return Formatting.RED;
     }
 }

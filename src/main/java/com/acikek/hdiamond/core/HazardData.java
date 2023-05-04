@@ -8,10 +8,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.JsonHelper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-public record HazardData(HazardDiamond diamond, List<Pictogram> pictograms) {
+public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
 
     public static final TrackedDataHandler<HazardData> DATA_TRACKER = TrackedDataHandler.of(
             (buf, data) -> data.write(buf),
@@ -19,12 +19,12 @@ public record HazardData(HazardDiamond diamond, List<Pictogram> pictograms) {
     );
 
     public static HazardData empty() {
-        return new HazardData(HazardDiamond.empty(), new ArrayList<>());
+        return new HazardData(HazardDiamond.empty(), new HashSet<>());
     }
 
     public static HazardData fromJson(JsonObject obj) {
         HazardDiamond diamond = HazardDiamond.fromJson(JsonHelper.getObject(obj, "diamond"));
-        List<Pictogram> pictograms = Pictogram.fromJson(obj);
+        Set<Pictogram> pictograms = Pictogram.fromJson(obj);
         return new HazardData(diamond, pictograms);
     }
 
@@ -53,7 +53,7 @@ public record HazardData(HazardDiamond diamond, List<Pictogram> pictograms) {
     }
 
     public HazardData copy() {
-        return new HazardData(diamond.copy(), new ArrayList<>(pictograms));
+        return new HazardData(diamond.copy(), new HashSet<>(pictograms));
     }
 
     public static void register() {
