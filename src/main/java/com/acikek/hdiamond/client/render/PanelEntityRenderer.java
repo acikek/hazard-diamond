@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -38,6 +39,8 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
             return;
         }
 
+        int lightFront = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
+
         matrices.push();
         //matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getPitch()));
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180 - entity.getYaw()));
@@ -47,7 +50,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         modelRenderer.render(
                 matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()),
                 null, BakedModelManagerHelper.getModel(modelManager, PANEL_MODEL),
-                1.0f, 1.0f, 1.0f, light, OverlayTexture.DEFAULT_UV
+                1.0f, 1.0f, 1.0f, lightFront, OverlayTexture.DEFAULT_UV
         );
 
         matrices.pop();

@@ -20,4 +20,8 @@ public class HazardQuadrant<E extends Enum<E>> {
         value = index == values.length - 1 ? values[0] : values[index + 1];
         return value;
     }
+
+    public HazardQuadrant<E> copy() {
+        return new HazardQuadrant<>(enumClass, value);
+    }
 }

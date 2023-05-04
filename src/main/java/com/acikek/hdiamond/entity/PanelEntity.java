@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -30,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
 public class PanelEntity extends AbstractDecorationEntity {
 
     public static EntityType<PanelEntity> ENTITY_TYPE;
+
+    public static final TrackedData<Boolean> WAXED = DataTracker.registerData(PanelEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<HazardData> HAZARD_DATA = DataTracker.registerData(PanelEntity.class, HazardData.DATA_TRACKER);
 
     public PanelEntity(EntityType<PanelEntity> entityType, World world) {
@@ -44,13 +47,15 @@ public class PanelEntity extends AbstractDecorationEntity {
 
     @Override
     protected void initDataTracker() {
+        getDataTracker().startTracking(WAXED, false);
         getDataTracker().startTracking(HAZARD_DATA, HazardData.empty());
     }
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         if (world.isClient()) {
-            MinecraftClient.getInstance().setScreen(new HazardScreen(Text.empty(), getHazardData()));
+            var screen = new HazardScreen(Text.empty(), this, !isWaxed(), getHazardData().copy());
+            MinecraftClient.getInstance().setScreen(screen);
         }
         return ActionResult.success(world.isClient());
     }
@@ -94,18 +99,35 @@ public class PanelEntity extends AbstractDecorationEntity {
         return super.canStayAttached();
     }
 
+    public boolean isWaxed() {
+        return getDataTracker().get(WAXED);
+    }
+
     public HazardData getHazardData() {
         return getDataTracker().get(HAZARD_DATA);
     }
 
+    public void updateHazardData(HazardData data) {
+        if (isWaxed()) {
+            return;
+        }
+        getDataTracker().set(HAZARD_DATA, data);
+    }
+
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putBoolean("Waxed", isWaxed());
         nbt.put("HazardData", getHazardData().toNbt());
+        nbt.putByte("Facing", (byte) facing.getId());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        getDataTracker().set(WAXED, nbt.getBoolean("Waxed"));
         getDataTracker().set(HAZARD_DATA, HazardData.fromNbt(nbt.getCompound("HazardData")));
+        facing = Direction.byId(nbt.getByte("Facing"));
     }
 
     public static void register() {
@@ -114,6 +136,7 @@ public class PanelEntity extends AbstractDecorationEntity {
                 HDiamond.id("panel"),
                 FabricEntityTypeBuilder.<PanelEntity>create(SpawnGroup.MISC, PanelEntity::new)
                         .dimensions(EntityDimensions.fixed(1.0f, 1.0f))
+                        .trackedUpdateRate(Integer.MAX_VALUE)
                         .build()
         );
     }

@@ -5,6 +5,8 @@ import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.TexturedElement;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
+import com.acikek.hdiamond.entity.PanelEntity;
+import com.acikek.hdiamond.network.HDNetworking;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
@@ -19,10 +21,14 @@ public class HazardScreen extends Screen {
     public int x;
     public int y;
 
+    public PanelEntity entity;
+    public boolean isEditable;
     public HazardData data;
 
-    public HazardScreen(Text title, HazardData data) {
+    public HazardScreen(Text title, PanelEntity entity, boolean isEditable, HazardData data) {
         super(title);
+        this.entity = entity;
+        this.isEditable = isEditable;
         this.data = data;
     }
 
@@ -81,5 +87,19 @@ public class HazardScreen extends Screen {
         renderQuadrants(matrices);
         renderPictograms(matrices);
         matrices.pop();
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        data.diamond().fire().scroll();
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void close() {
+        if (entity != null) {
+            HDNetworking.c2sUpdatePanelData(entity, data);
+        }
+        super.close();
     }
 }

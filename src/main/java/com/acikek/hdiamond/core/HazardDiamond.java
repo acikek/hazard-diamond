@@ -65,4 +65,8 @@ public record HazardDiamond(
         var specific = buf.readEnumConstant(SpecificHazard.class);
         return new HazardDiamond(fire, health, reactivity, specific);
     }
+
+    public HazardDiamond copy() {
+        return new HazardDiamond(fire.copy(), health.copy(), reactivity.copy(), specific.copy());
+    }
 }

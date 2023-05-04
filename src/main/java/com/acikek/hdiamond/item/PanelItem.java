@@ -33,7 +33,6 @@ public class PanelItem extends Item {
         if (player != null && !canPlaceOn(player, context.getSide(), context.getStack(), offset)) {
             return ActionResult.FAIL;
         }
-        System.out.println(context.getSide());
         var panelEntity = new PanelEntity(world, offset, context.getSide());
         NbtCompound nbt = context.getStack().getNbt();
         if (nbt != null) {

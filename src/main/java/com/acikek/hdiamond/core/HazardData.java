@@ -52,7 +52,11 @@ public record HazardData(HazardDiamond diamond, List<Pictogram> pictograms) {
         return new HazardData(diamond, pictograms);
     }
 
-    public static void registerTrackedData() {
+    public HazardData copy() {
+        return new HazardData(diamond.copy(), new ArrayList<>(pictograms));
+    }
+
+    public static void register() {
         TrackedDataHandlerRegistry.register(DATA_TRACKER);
     }
 }
