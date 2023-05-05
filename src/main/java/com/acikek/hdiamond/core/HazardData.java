@@ -56,6 +56,32 @@ public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
         return new HazardData(diamond.copy(), new HashSet<>(pictograms));
     }
 
+    public boolean isEmpty() {
+        return diamond().isEmpty() && pictograms().isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        HazardData data = (HazardData) o;
+        if (!diamond.equals(data.diamond)) {
+            return false;
+        }
+        return pictograms.equals(data.pictograms);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = diamond.hashCode();
+        result = 31 * result + pictograms.hashCode();
+        return result;
+    }
+
     public static void register() {
         TrackedDataHandlerRegistry.register(DATA_TRACKER);
     }

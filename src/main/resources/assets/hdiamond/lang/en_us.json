@@ -1,6 +1,7 @@
 {
   "item.hdiamond.panel_item": "Hazard Diamond",
   "gui.hdiamond.hazard_screen.title": "Hazard Identifications",
+  "tooltip.hdiamond.panel_item.pictograms": "%s pictogram(s)",
   "quadrant.hdiamond.fire.type": "Fire Hazard",
   "quadrant.hdiamond.fire.inflammable.name": "Inflammable",
   "quadrant.hdiamond.fire.inflammable.description": "Will not burn.",

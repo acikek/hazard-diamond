@@ -23,6 +23,10 @@ public interface QuadrantSection<E extends Enum<E>> extends DiamondSection<E> {
                 .append(DiamondSection.super.getTitle().formatted(getLevelColor()));
     }
 
+    default MutableText getSymbol() {
+        return Text.literal(String.valueOf(getValue().ordinal())).formatted(getTypeColor());
+    }
+
     default Formatting getLevelColor() {
         return switch (getValue().ordinal()) {
             case 0, 1 -> Formatting.GREEN;

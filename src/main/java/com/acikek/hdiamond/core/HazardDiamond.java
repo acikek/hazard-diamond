@@ -70,4 +70,38 @@ public record HazardDiamond(
     public HazardDiamond copy() {
         return new HazardDiamond(fire.copy(), health.copy(), reactivity.copy(), specific.copy());
     }
+
+    public boolean isEmpty() {
+        return fire.isEmpty() && health().isEmpty() && reactivity().isEmpty() && specific.isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        HazardDiamond that = (HazardDiamond) o;
+        if (!fire.equals(that.fire)) {
+            return false;
+        }
+        if (!health.equals(that.health)) {
+            return false;
+        }
+        if (!reactivity.equals(that.reactivity)) {
+            return false;
+        }
+        return specific.equals(that.specific);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fire.hashCode();
+        result = 31 * result + health.hashCode();
+        result = 31 * result + reactivity.hashCode();
+        result = 31 * result + specific.hashCode();
+        return result;
+    }
 }

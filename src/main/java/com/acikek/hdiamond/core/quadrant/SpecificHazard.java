@@ -1,6 +1,8 @@
 package com.acikek.hdiamond.core.quadrant;
 
 import com.acikek.hdiamond.core.section.QuadrantSection;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 /**
@@ -49,6 +51,18 @@ public enum SpecificHazard implements QuadrantSection<SpecificHazard> {
     @Override
     public Formatting getTypeColor() {
         return Formatting.WHITE;
+    }
+
+    @Override
+    public MutableText getSymbol() {
+        var text = switch (this) {
+            case NONE -> Text.empty();
+            case REACTS_WITH_WATER -> Text.literal("W").formatted(Formatting.STRIKETHROUGH);
+            case OXIDIZER -> Text.literal("OX");
+            case SIMPLE_ASPHYXIANT -> Text.literal("SA");
+            case RADIOACTIVE -> Text.literal("R");
+        };
+        return text.formatted(Formatting.WHITE);
     }
 
     @Override

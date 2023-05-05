@@ -1,6 +1,8 @@
 package com.acikek.hdiamond.item;
 
 import com.acikek.hdiamond.HDiamond;
+import com.acikek.hdiamond.core.HazardData;
+import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.entity.PanelEntity;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.item.TooltipContext;
@@ -13,6 +15,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
@@ -42,6 +45,10 @@ public class PanelItem extends Item {
         NbtCompound nbt = context.getStack().getNbt();
         if (nbt != null) {
             EntityType.loadFromEntityNbt(world, player, panelEntity, nbt);
+            if (nbt.contains("HazardData")) {
+                var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
+                panelEntity.getDataTracker().set(PanelEntity.HAZARD_DATA, data);
+            }
         }
         if (!panelEntity.canStayAttached()) {
             return ActionResult.CONSUME;
@@ -63,6 +70,23 @@ public class PanelItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        if (stack.hasNbt()) {
+            var nbt = stack.getOrCreateNbt();
+            if (nbt.contains("HazardData")) {
+                var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
+                var sep = Text.literal("-").formatted(Formatting.GRAY);
+                var numerals = data.diamond().fire().get().getSymbol()
+                        .append(sep).append(data.diamond().health().get().getSymbol())
+                        .append(sep).append(data.diamond().reactivity().get().getSymbol());
+                if (data.diamond().specific().get() != SpecificHazard.NONE) {
+                    numerals.append(sep).append(data.diamond().specific().get().getSymbol());
+                }
+                tooltip.add(numerals);
+                var pictograms = Text.translatable("tooltip.hdiamond.panel_item.pictograms", data.pictograms().size())
+                        .formatted(Formatting.GRAY);
+                tooltip.add(pictograms);
+            }
+        }
         super.appendTooltip(stack, world, tooltip, context);
     }
 

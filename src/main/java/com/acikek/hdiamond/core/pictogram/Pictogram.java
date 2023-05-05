@@ -56,6 +56,7 @@ public enum Pictogram implements DiamondSection<Pictogram> {
     public static void writeNbt(NbtCompound nbt, Set<Pictogram> pictograms) {
         var ints = pictograms.stream()
                 .map(Enum::ordinal)
+                .sorted()
                 .toList();
         nbt.putIntArray("Pictograms", ints);
     }

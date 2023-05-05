@@ -3,6 +3,7 @@ package com.acikek.hdiamond.entity;
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
+import com.acikek.hdiamond.item.PanelItem;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.MinecraftClient;
@@ -29,7 +30,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 
 public class PanelEntity extends AbstractDecorationEntity {
@@ -95,6 +95,11 @@ public class PanelEntity extends AbstractDecorationEntity {
         if (!world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             return;
         }
+        ItemStack stack = PanelItem.INSTANCE.getDefaultStack();
+        if (!getHazardData().isEmpty()) {
+            stack.getOrCreateNbt().put("HazardData", getHazardData().toNbt());
+        }
+        dropStack(stack);
         playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0f, 1.0f);
     }
 
@@ -131,8 +136,10 @@ public class PanelEntity extends AbstractDecorationEntity {
         if (isWaxed()) {
             return;
         }
-        getDataTracker().set(HAZARD_DATA, data);
-        playSound(SoundEvents.BLOCK_SMITHING_TABLE_USE, 1.0f, 1.0f);
+        if (!getHazardData().equals(data)) {
+            getDataTracker().set(HAZARD_DATA, data);
+            playSound(SoundEvents.BLOCK_SMITHING_TABLE_USE, 1.0f, 1.0f);
+        }
     }
 
     @Override
