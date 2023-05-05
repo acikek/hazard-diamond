@@ -49,19 +49,10 @@ public class HazardScreen extends Screen {
         addQuadrant(data.diamond().health(), x, y - 34);
         addQuadrant(data.diamond().reactivity(), x + 32, y - 34);
         addQuadrant(data.diamond().specific(), x + 16, y - 18);
-        /*addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().fire(), x + 16, y - 50, 62));
-        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().health(), x, y - 34, 62));
-        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().reactivity(), x * 2 + 65, y * 2 - 67, 62, 62));
-        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().specific(), x * 2 + 33, y * 2 - 35, 62, 62));*/
-
         for (int i = 0; i < Pictogram.values().length; i++) {
             Pictogram pictogram = Pictogram.values()[i];
             addPictogram(pictogram, x - 57 + i * 18, y + 3 + (i % 2 == 0 ? 18 : 0));
         }
-
-        //addPictogram(Pictogram.EXPLOSIVE, x - 57, y + 21);
-
-        //addDrawableChild(new DiamondWidget.PictogramLabel(this, Pictogram.EXPLOSIVE, (x - 56) * 2 - 1, (y + 22) * 2 - 1, 66, 66));
     }
 
     public static void setTexture() {
@@ -91,7 +82,7 @@ public class HazardScreen extends Screen {
     }
 
     public void renderPictogram(MatrixStack matrices, Pictogram pictogram, int x, int y) {
-        float color = data.pictograms().contains(pictogram) ? 1.0f : 0.6f;
+        float color = data.pictograms().contains(pictogram) ? 1.0f : 0.5f;
         RenderSystem.setShaderColor(color, color, color, 1.0f);
         renderElement(matrices, pictogram, x, y);
     }
