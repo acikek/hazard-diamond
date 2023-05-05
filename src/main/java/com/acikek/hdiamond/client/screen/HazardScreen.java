@@ -26,11 +26,11 @@ public class HazardScreen extends Screen {
     public boolean isEditable;
     public HazardData data;
 
-    public HazardScreen(Text title, PanelEntity entity, boolean isEditable, HazardData data) {
-        super(title);
+    public HazardScreen(PanelEntity entity) {
+        super(Text.translatable("gui.hdiamond.hazard_screen.title"));
         this.entity = entity;
-        this.isEditable = isEditable;
-        this.data = data;
+        this.isEditable = !entity.isWaxed();
+        this.data = entity.getHazardData().copy();
     }
 
     public void addQuadrant(QuadrantValue<?> quadrant, int halfX, int halfY) {

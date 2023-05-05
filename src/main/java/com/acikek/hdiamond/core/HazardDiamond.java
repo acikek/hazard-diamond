@@ -1,7 +1,7 @@
 package com.acikek.hdiamond.core;
 
 import com.acikek.hdiamond.core.quadrant.*;
-import com.acikek.hdiamond.core.section.DiamondSection;
+import com.acikek.hdiamond.core.section.QuadrantSection;
 import com.google.gson.JsonObject;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -26,11 +26,11 @@ public record HazardDiamond(
     }
 
     public static HazardDiamond fromJson(JsonObject obj) {
-        var fire = DiamondSection.quadrantsFromJson(obj.get("fire"), FireHazard.class);
-        var health = DiamondSection.quadrantsFromJson(obj.get("health"), HealthHazard.class);
-        var reactivity = DiamondSection.quadrantsFromJson(obj.get("reactivity"), Reactivity.class);
+        var fire = QuadrantSection.fromJson(obj.get("fire"), FireHazard.class);
+        var health = QuadrantSection.fromJson(obj.get("health"), HealthHazard.class);
+        var reactivity = QuadrantSection.fromJson(obj.get("reactivity"), Reactivity.class);
         var specific = obj.has("specific")
-                ? DiamondSection.quadrantsFromJson(obj.get("specific"), SpecificHazard.class)
+                ? QuadrantSection.fromJson(obj.get("specific"), SpecificHazard.class)
                 : SpecificHazard.NONE;
         return new HazardDiamond(fire, health, reactivity, specific);
     }
