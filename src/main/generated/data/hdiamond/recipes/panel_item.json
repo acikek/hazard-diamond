@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "tag": "c:blue_dyes"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    },
+    "R": {
+      "tag": "c:red_dyes"
+    },
+    "W": {
+      "tag": "c:white_dyes"
+    },
+    "Y": {
+      "tag": "c:yellow_dyes"
+    }
+  },
+  "pattern": [
+    " R ",
+    "BIY",
+    " W "
+  ],
+  "result": {
+    "count": 4,
+    "item": "hdiamond:panel_item"
+  }
+}

@@ -22,6 +22,9 @@
     ],
     "main": [
       "com.acikek.hdiamond.HDiamond"
+    ],
+    "fabric-datagen": [
+      "com.acikek.hdiamond.datagen.HDDatagen"
     ]
   },
   "mixins": [

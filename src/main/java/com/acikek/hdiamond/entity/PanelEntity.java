@@ -95,11 +95,7 @@ public class PanelEntity extends AbstractDecorationEntity {
         if (!world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             return;
         }
-        ItemStack stack = PanelItem.INSTANCE.getDefaultStack();
-        if (!getHazardData().isEmpty()) {
-            stack.getOrCreateNbt().put("HazardData", getHazardData().toNbt());
-        }
-        dropStack(stack);
+        dropStack(getPickBlockStack());
         playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0f, 1.0f);
     }
 
@@ -140,6 +136,16 @@ public class PanelEntity extends AbstractDecorationEntity {
             getDataTracker().set(HAZARD_DATA, data);
             playSound(SoundEvents.BLOCK_SMITHING_TABLE_USE, 1.0f, 1.0f);
         }
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickBlockStack() {
+        ItemStack stack = PanelItem.INSTANCE.getDefaultStack();
+        if (!getHazardData().isEmpty()) {
+            stack.getOrCreateNbt().put("HazardData", getHazardData().toNbt());
+        }
+        return stack;
     }
 
     @Override
