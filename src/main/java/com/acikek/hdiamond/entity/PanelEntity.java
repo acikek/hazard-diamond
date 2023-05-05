@@ -4,6 +4,7 @@ import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -14,11 +15,13 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.decoration.AbstractDecorationEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +29,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 
 public class PanelEntity extends AbstractDecorationEntity {
@@ -53,9 +57,25 @@ public class PanelEntity extends AbstractDecorationEntity {
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        if (world.isClient()) {
-            var screen = new HazardScreen(Text.empty(), this, !isWaxed(), getHazardData().copy());
-            MinecraftClient.getInstance().setScreen(screen);
+        if (hand != Hand.MAIN_HAND) {
+            return ActionResult.PASS;
+        }
+        ItemStack stack = player.getStackInHand(hand);
+        if (player.isSneaking() && stack.isOf(Items.HONEYCOMB)) {
+            if (isWaxed()) {
+                return ActionResult.FAIL;
+            }
+            if (!player.isCreative()) {
+                stack.decrement(1);
+            }
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                Criteria.ITEM_USED_ON_BLOCK.trigger(serverPlayer, getBlockPos(), stack);
+            }
+            playSound(SoundEvents.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
+            getDataTracker().set(WAXED, true);
+        }
+        else if (world.isClient()) {
+            MinecraftClient.getInstance().setScreen(new HazardScreen(this));
         }
         return ActionResult.success(world.isClient());
     }
