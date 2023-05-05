@@ -1,14 +1,19 @@
 package com.acikek.hdiamond.core;
 
 import com.acikek.hdiamond.core.pictogram.Pictogram;
+import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.google.gson.JsonObject;
 import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.JsonHelper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
@@ -58,6 +63,22 @@ public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
 
     public boolean isEmpty() {
         return diamond().isEmpty() && pictograms().isEmpty();
+    }
+
+    public List<Text> getTooltip() {
+        List<Text> result = new ArrayList<>();
+        var sep = Text.literal("-").formatted(Formatting.GRAY);
+        var numerals = diamond().fire().get().getSymbol()
+                .append(sep).append(diamond().health().get().getSymbol())
+                .append(sep).append(diamond().reactivity().get().getSymbol());
+        if (diamond().specific().get() != SpecificHazard.NONE) {
+            numerals.append(sep).append(diamond().specific().get().getSymbol());
+        }
+        result.add(numerals);
+        var pictograms = Text.translatable("tooltip.hdiamond.panel_item.pictograms", pictograms().size())
+                .formatted(Formatting.GRAY);
+        result.add(pictograms);
+        return result;
     }
 
     @Override

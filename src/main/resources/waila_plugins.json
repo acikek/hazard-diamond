@@ -1,0 +1,5 @@
+{
+  "hdiamond:plugin": {
+    "initializer": "com.acikek.hdiamond.compat.wthit.HDiamondWailaPlugin"
+  }
+}

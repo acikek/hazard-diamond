@@ -74,17 +74,7 @@ public class PanelItem extends Item {
             var nbt = stack.getOrCreateNbt();
             if (nbt.contains("HazardData")) {
                 var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
-                var sep = Text.literal("-").formatted(Formatting.GRAY);
-                var numerals = data.diamond().fire().get().getSymbol()
-                        .append(sep).append(data.diamond().health().get().getSymbol())
-                        .append(sep).append(data.diamond().reactivity().get().getSymbol());
-                if (data.diamond().specific().get() != SpecificHazard.NONE) {
-                    numerals.append(sep).append(data.diamond().specific().get().getSymbol());
-                }
-                tooltip.add(numerals);
-                var pictograms = Text.translatable("tooltip.hdiamond.panel_item.pictograms", data.pictograms().size())
-                        .formatted(Formatting.GRAY);
-                tooltip.add(pictograms);
+                tooltip.addAll(data.getTooltip());
             }
         }
         super.appendTooltip(stack, world, tooltip, context);

@@ -1,5 +1,6 @@
 {
   "item.hdiamond.panel_item": "Hazard Diamond",
+  "entity.hdiamond.panel": "Hazard Diamond",
   "gui.hdiamond.hazard_screen.title": "Hazard Identifications",
   "tooltip.hdiamond.panel_item.pictograms": "%s pictogram(s)",
   "quadrant.hdiamond.fire.type": "Fire Hazard",
