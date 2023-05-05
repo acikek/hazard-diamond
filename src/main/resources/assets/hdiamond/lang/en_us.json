@@ -31,5 +31,16 @@
   "quadrant.hdiamond.reactivity.may_detonate.name": "May Detonate",
   "quadrant.hdiamond.reactivity.may_detonate.description": "Capable of detonation upon ignition.",
   "quadrant.hdiamond.reactivity.readily_detonates.name": "Rapidly Detonates",
-  "quadrant.hdiamond.reactivity.readily_detonates.description": "Capable of detonation in normal conditions."
+  "quadrant.hdiamond.reactivity.readily_detonates.description": "Capable of detonation in normal conditions.",
+  "quadrant.hdiamond.specific.type": "Specific Hazard",
+  "quadrant.hdiamond.specific.none.name": "None",
+  "quadrant.hdiamond.specific.none.description": "No special hazard.",
+  "quadrant.hdiamond.specific.reacts_with_water.name": "Reacts With Water",
+  "quadrant.hdiamond.specific.reacts_with_water.description": "Reacts with water in a dangerous manner.",
+  "quadrant.hdiamond.specific.oxidizer.name": "Oxidizer",
+  "quadrant.hdiamond.specific.oxidizer.description": "Allows chemicals to burn without air supply.",
+  "quadrant.hdiamond.specific.simple_asphyxiant.name": "Simple Asphyxiant",
+  "quadrant.hdiamond.specific.simple_asphyxiant.description": "Alters the normal oxygen concentration in air.",
+  "quadrant.hdiamond.specific.radioactive.name": "Radioactive",
+  "quadrant.hdiamond.specific.radioactive.description": "Decays radioactively."
 }

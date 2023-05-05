@@ -2,6 +2,7 @@ package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.core.HazardData;
+import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
@@ -32,12 +33,35 @@ public class HazardScreen extends Screen {
         this.data = data;
     }
 
+    public void addQuadrant(QuadrantValue<?> quadrant, int halfX, int halfY) {
+        addDrawableChild(new DiamondWidget.Quadrant(this, quadrant, halfX, halfY, 62));
+    }
+
+    public void addPictogram(Pictogram pictogram, int halfX, int halfY) {
+        addDrawableChild(new DiamondWidget.PictogramLabel(this, pictogram, halfX, halfY, 66));
+    }
+
     @Override
     protected void init() {
         this.x = (this.width - 128) / 4;
         this.y = (this.height) / 4 - 2;
-        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().health(), x * 2 + 1, y * 2 - 67, 62, 62));
+        addQuadrant(data.diamond().fire(), x + 16, y - 50);
+        addQuadrant(data.diamond().health(), x, y - 34);
+        addQuadrant(data.diamond().reactivity(), x + 32, y - 34);
+        addQuadrant(data.diamond().specific(), x + 16, y - 18);
+        /*addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().fire(), x + 16, y - 50, 62));
+        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().health(), x, y - 34, 62));
         addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().reactivity(), x * 2 + 65, y * 2 - 67, 62, 62));
+        addDrawableChild(new DiamondWidget.Quadrant(this, data.diamond().specific(), x * 2 + 33, y * 2 - 35, 62, 62));*/
+
+        for (int i = 0; i < Pictogram.values().length; i++) {
+            Pictogram pictogram = Pictogram.values()[i];
+            addPictogram(pictogram, x - 57 + i * 18, y + 3 + (i % 2 == 0 ? 18 : 0));
+        }
+
+        //addPictogram(Pictogram.EXPLOSIVE, x - 57, y + 21);
+
+        //addDrawableChild(new DiamondWidget.PictogramLabel(this, Pictogram.EXPLOSIVE, (x - 56) * 2 - 1, (y + 22) * 2 - 1, 66, 66));
     }
 
     public static void setTexture() {

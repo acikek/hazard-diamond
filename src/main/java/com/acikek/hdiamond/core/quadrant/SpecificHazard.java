@@ -50,4 +50,15 @@ public enum SpecificHazard implements QuadrantSection<SpecificHazard> {
     public Formatting getTypeColor() {
         return Formatting.WHITE;
     }
+
+    @Override
+    public Formatting getLevelColor() {
+        return switch (this) {
+            case NONE -> Formatting.GRAY;
+            case REACTS_WITH_WATER -> Formatting.DARK_AQUA;
+            case OXIDIZER -> Formatting.RED;
+            case SIMPLE_ASPHYXIANT -> Formatting.GOLD;
+            case RADIOACTIVE -> Formatting.DARK_GREEN;
+        };
+    }
 }

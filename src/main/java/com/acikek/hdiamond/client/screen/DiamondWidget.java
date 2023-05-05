@@ -4,6 +4,7 @@ import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -28,12 +29,20 @@ public abstract class DiamondWidget extends ButtonWidget {
         );
     }
 
+    public DiamondWidget(HazardScreen screen, int halfX, int halfY, int size, Text message, PressAction action) {
+        this(screen, (halfX * 2) + 1, (halfY * 2) + 1, size, size, message, action);
+    }
+
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x, y + height / 2, 255);
+        /*DrawableHelper.fill(matrices, x - 1, y + height / 2 - 1, x + 1, y + height / 2 + 1, 0xFFFFFFFF);
+        DrawableHelper.fill(matrices, x + width / 2 - 1, y + height -1, x + width / 2 + 1, y + height + 1, 0xFFFFFFFF);
+        DrawableHelper.fill(matrices, x + width - 1, y + height / 2 -1, x + width + 1, y + height / 2 + 1, 0xFFFFFFFF);
+        DrawableHelper.fill(matrices, x + width / 2 - 1, y - 1, x + width / 2 + 1, y + 1, 0xFFFFFFFF);*/
+        /*drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x, y + height / 2, 255);
         drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x + width / 2, y + height, 255);
         drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x + width, y + height / 2, 255);
-        drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x + width / 2, y, 255);
+        drawCenteredText(matrices, MinecraftClient.getInstance().textRenderer, "I", x + width / 2, y, 255);*/
         hovered = isMouseOver(mouseX, mouseY);
         if (hovered) {
             renderTooltip(matrices, mouseX, mouseY);
@@ -52,12 +61,25 @@ public abstract class DiamondWidget extends ButtonWidget {
         return diamond.contains(mouseX, mouseY);
     }
 
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (hovered) {
+            super.onClick(mouseX, mouseY);
+        }
+        return hovered;
+    }
+
+    @Override
+    public void onClick(double mouseX, double mouseY) {
+        // Empty
+    }
+
     public static class Quadrant extends DiamondWidget {
 
         public QuadrantValue<?> quadrant;
 
-        public Quadrant(HazardScreen screen, QuadrantValue<?> quadrant, int x, int y, int width, int height) {
-            super(screen, x, y, width, height, quadrant.get().getTitle(), button -> {
+        public Quadrant(HazardScreen screen, QuadrantValue<?> quadrant, int halfX, int halfY, int size) {
+            super(screen, halfX, halfY, size, quadrant.get().getTitle(), button -> {
                 if (screen.isEditable) {
                     quadrant.scroll();
                 }
@@ -67,10 +89,6 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-            if (quadrant == null) {
-                System.out.println("QUADRANT IS NULL, WHY???");
-                return;
-            }
             renderDiamondTooltip(quadrant.get(), matrices, mouseX, mouseY);
         }
     }
@@ -79,8 +97,8 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         public Pictogram pictogram;
 
-        public PictogramLabel(HazardScreen screen, Pictogram pictogram, int x, int y, int width, int height) {
-            super(screen, x, y, width, height, pictogram.getTitle(), button -> {
+        public PictogramLabel(HazardScreen screen, Pictogram pictogram, int halfX, int halfY, int size) {
+            super(screen, halfX, halfY, size, pictogram.getTitle(), button -> {
                 if (!screen.isEditable) {
                     return;
                 }
