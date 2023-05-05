@@ -3,8 +3,11 @@ package com.acikek.hdiamond.client.screen;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -64,6 +67,10 @@ public abstract class DiamondWidget extends ButtonWidget {
         // Empty
     }
 
+    public static void playSound() {
+        MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
+    }
+
     public static class Quadrant extends DiamondWidget {
 
         public QuadrantValue<?> quadrant;
@@ -72,6 +79,7 @@ public abstract class DiamondWidget extends ButtonWidget {
             super(screen, halfX, halfY, size, quadrant.get().getTitle(), button -> {
                 if (screen.isEditable) {
                     quadrant.scroll();
+                    playSound();
                 }
             });
             this.quadrant = quadrant;
@@ -99,6 +107,7 @@ public abstract class DiamondWidget extends ButtonWidget {
                 else {
                     pictograms.add(pictogram);
                 }
+                playSound();
             });
             this.pictogram = pictogram;
         }
