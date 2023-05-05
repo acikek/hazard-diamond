@@ -4,8 +4,15 @@
   "version": "${version}",
   "name": "Hazard Diamond",
   "description": "",
-  "authors": [],
-  "contact": {},
+  "authors": [
+    "acikek",
+    "VirtuaLilith"
+  ],
+  "contact": {
+    "sources": "https://github.com/acikek/hazard-diamond",
+    "issues": "https://github.com/acikek/hazard-diamond/issues",
+    "homepage": "https://modrinth.com/mod/hazard-diamond"
+  },
   "license": "MIT",
   "icon": "assets/hdiamond/icon.png",
   "environment": "*",
