@@ -47,7 +47,7 @@ public class HazardDataLoader extends JsonDataLoader implements IdentifiableReso
                 HDiamond.LOGGER.error("Failed to load hazard data '" + pair.getKey() + "':", e);
             }
         }
-        HDiamond.LOGGER.info("Loaded " + successes + " hazard data objects");
+        HDiamond.LOGGER.info("Loaded " + successes + " hazard data object" + (successes == 1 ? "" : "s"));
     }
 
     public static void register() {

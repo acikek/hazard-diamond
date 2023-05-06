@@ -1,0 +1,12 @@
+{
+  "diamond": {
+    "fire": 3,
+    "health": 1,
+    "reactivity": 0,
+    "specific": "none"
+  },
+  "pictograms": [
+    "harmful",
+    "flammable"
+  ]
+}
