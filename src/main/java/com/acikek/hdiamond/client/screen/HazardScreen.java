@@ -21,6 +21,7 @@ public class HazardScreen extends Screen {
 
     public int x;
     public int y;
+    public boolean movedCursor = false;
 
     public PanelEntity entity;
     public boolean isEditable;
@@ -116,8 +117,11 @@ public class HazardScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
+    public void mouseMoved(double mouseX, double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        if (!movedCursor) {
+            movedCursor = true;
+        }
     }
 
     @Override

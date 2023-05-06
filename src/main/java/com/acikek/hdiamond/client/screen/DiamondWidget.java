@@ -43,6 +43,9 @@ public abstract class DiamondWidget extends ButtonWidget {
     }
 
     public void renderDiamondTooltip(DiamondSection<?> section, MatrixStack matrices, int mouseX, int mouseY, boolean off) {
+        if (!screen.movedCursor) {
+            return;
+        }
         List<Text> tooltip = new ArrayList<>();
         tooltip.add(section.getTitle().styled(style -> off ? style.withFormatting(Formatting.GRAY) : style));
         tooltip.add(section.getDescription().formatted(off ? Formatting.DARK_GRAY : Formatting.GRAY));
