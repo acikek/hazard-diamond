@@ -3,7 +3,7 @@
   "id": "hdiamond",
   "version": "${version}",
   "name": "Hazard Diamond",
-  "description": "",
+  "description": "Implements the NFPA 704 and GHS identification standards in Minecraft",
   "authors": [
     "acikek",
     "VirtuaLilith"
@@ -31,7 +31,7 @@
     "hdiamond.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.19",
+    "fabricloader": ">=0.14.12",
     "fabric": "*",
     "minecraft": "1.19.2"
   }
