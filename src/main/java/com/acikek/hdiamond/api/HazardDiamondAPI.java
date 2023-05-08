@@ -1,5 +1,6 @@
 package com.acikek.hdiamond.api;
 
+import com.acikek.hdiamond.api.impl.HazardDiamondAPIImpl;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.HazardDiamond;
@@ -8,7 +9,6 @@ import com.acikek.hdiamond.core.quadrant.FireHazard;
 import com.acikek.hdiamond.core.quadrant.HealthHazard;
 import com.acikek.hdiamond.core.quadrant.Reactivity;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
-import com.acikek.hdiamond.load.HazardDataLoader;
 import com.acikek.hdiamond.network.HDNetworking;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,13 +24,22 @@ import java.util.stream.Collectors;
 public class HazardDiamondAPI {
 
     /**
+     * @param id the ID of the hazard data object
+     * @return whether the data object exists and is loaded from a data pack source
+     */
+    public static boolean hasData(Identifier id) {
+        return HazardDiamondAPIImpl.getData(id) != null;
+    }
+
+    /**
      * Retrieves loaded hazard data from the {@code hazard_data} data pack source.
      * @param id the ID of the hazard data object
      * @return the data object, if any
      * @throws IllegalStateException if the data object does not exist
+     * @see HazardDiamondAPI#hasData(Identifier) 
      */
     public static HazardData getData(Identifier id) {
-        var result = HazardDataLoader.hazardData.get(id);
+        var result = HazardDiamondAPIImpl.getData(id);
         if (result == null) {
             throw new IllegalStateException("hazard data '" + id + "' does not exist");
         }
