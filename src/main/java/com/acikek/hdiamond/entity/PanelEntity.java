@@ -6,6 +6,8 @@ import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.item.PanelItem;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.block.AbstractRedstoneGateBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -117,7 +119,11 @@ public class PanelEntity extends AbstractDecorationEntity {
 
     @Override
     public boolean canStayAttached() {
-        return super.canStayAttached();
+        if (!world.isSpaceEmpty(this)) {
+            return false;
+        }
+        BlockState blockState = world.getBlockState(attachmentPos.offset(facing.getOpposite()));
+        return blockState.getMaterial().isSolid() || facing.getAxis().isHorizontal() && AbstractRedstoneGateBlock.isRedstoneGate(blockState);
     }
 
     public boolean isWaxed() {
