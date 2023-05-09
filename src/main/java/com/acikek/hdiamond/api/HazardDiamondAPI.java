@@ -20,11 +20,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -121,10 +119,12 @@ public class HazardDiamondAPI {
      * Opens a mutable {@link HazardScreen} on the client.
      * @param holder the original hazard data for the client to edit
      * @param id used to identify edited hazard screens
+     * @throws NullPointerException if the id is null
      * @see HazardScreenEdited#EVENT
      */
     @Environment(EnvType.CLIENT)
-    public static void openMutable(HazardDataHolder holder, Identifier id) {
+    public static void openMutable(HazardDataHolder holder, @NotNull Identifier id) {
+        Objects.requireNonNull(id);
         HazardDiamondAPIImpl.setScreen(new HazardScreen(holder.getHazardData(), id));
     }
 

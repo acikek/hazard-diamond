@@ -13,6 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A block base that, when interacted with, displays immutable {@link HazardData}.<br>
+ * This is not automatically included in
+ */
 public class BlockWithHazardData extends Block implements HazardDataHolder {
 
     private final HazardData data;
