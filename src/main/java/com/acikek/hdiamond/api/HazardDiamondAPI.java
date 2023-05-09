@@ -1,6 +1,7 @@
 package com.acikek.hdiamond.api;
 
 import com.acikek.hdiamond.api.block.BlockWithHazardData;
+import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.api.impl.HazardDiamondAPIImpl;
 import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.screen.HazardScreen;
@@ -15,7 +16,8 @@ import com.acikek.hdiamond.network.HDNetworking;
 import mcp.mobius.waila.api.ITooltip;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -86,6 +88,16 @@ import java.util.stream.Collectors;
 public class HazardDiamondAPI {
 
     /**
+     * Fired when a mutable {@link HazardScreen} has been closed by the client.
+     */
+    public static final Event<HazardScreenEdited> EDIT_EVENT = EventFactory.createArrayBacked(HazardScreenEdited.class,
+             handlers -> (player, original, updated, id) -> {
+                for (var handler : handlers) {
+                    handler.onEdit(player, original, updated, id);
+                }
+            });
+
+    /**
      * @param id the ID of the hazard data object
      * @return whether the data object exists and is loaded from a data pack source
      */
@@ -109,12 +121,32 @@ public class HazardDiamondAPI {
     }
 
     /**
-     * Opens an immutable {@link HazardScreen} on this client instance.
+     * Opens an immutable {@link HazardScreen} on the client.
      * @param holder the holder of the hazard data object to display
      */
     @Environment(EnvType.CLIENT)
     public static void open(HazardDataHolder holder) {
-        MinecraftClient.getInstance().setScreen(new HazardScreen(holder.getHazardData()));
+        HazardDiamondAPIImpl.setScreen(new HazardScreen(holder.getHazardData()));
+    }
+
+    /**
+     * Opens a mutable {@link HazardScreen} on the client.
+     * @param holder the original hazard data for the client to edit
+     * @param id used to identify edited hazard screens
+     * @see HazardDiamondAPI#EDIT_EVENT
+     */
+    @Environment(EnvType.CLIENT)
+    public static void openMutable(HazardDataHolder holder, Identifier id) {
+        HazardDiamondAPIImpl.setScreen(new HazardScreen(holder.getHazardData(), id));
+    }
+
+    /**
+     * Opens a mutable {@link HazardScreen} on the client with blank starting data.
+     * @see HazardDiamondAPI#openMutable(HazardDataHolder, Identifier) 
+     */
+    @Environment(EnvType.CLIENT)
+    public static void openMutable(Identifier id) {
+        openMutable(HazardData.empty(), id);
     }
 
     /**

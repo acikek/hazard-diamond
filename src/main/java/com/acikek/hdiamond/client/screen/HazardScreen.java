@@ -1,6 +1,7 @@
 package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
+import com.acikek.hdiamond.api.HazardDiamondAPI;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
@@ -9,6 +10,7 @@ import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.entity.PanelEntity;
 import com.acikek.hdiamond.network.HDNetworking;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -25,21 +27,29 @@ public class HazardScreen extends Screen {
 
     public PanelEntity entity;
     public boolean isEditable;
+    public HazardData originalData;
+    public Identifier id;
     public HazardData data;
 
-    HazardScreen(PanelEntity entity, boolean isEditable, HazardData data) {
+    HazardScreen(PanelEntity entity, boolean isEditable, HazardData originalData, Identifier id, HazardData data) {
         super(Text.translatable("gui.hdiamond.hazard_screen.title"));
         this.entity = entity;
         this.isEditable = isEditable;
+        this.originalData = originalData;
+        this.id = id;
         this.data = data;
     }
 
     public HazardScreen(PanelEntity entity) {
-        this(entity, !entity.isWaxed(), entity.getHazardData().copy());
+        this(entity, !entity.isWaxed(), null, null, entity.getHazardData().copy());
     }
 
     public HazardScreen(HazardData data) {
-        this(null, false, data);
+        this(null, false, null, null, data);
+    }
+
+    public HazardScreen(HazardData data, Identifier id) {
+        this(null, true, data.copy(), id, data);
     }
 
     public void addQuadrant(QuadrantValue<?> quadrant, int halfX, int halfY) {
@@ -128,6 +138,9 @@ public class HazardScreen extends Screen {
     public void close() {
         if (entity != null) {
             HDNetworking.c2sUpdatePanelData(entity, data);
+        }
+        if (originalData != null) {
+            HazardDiamondAPI.EDIT_EVENT.invoker().onEdit(MinecraftClient.getInstance().player, originalData, data, id);
         }
         super.close();
     }
