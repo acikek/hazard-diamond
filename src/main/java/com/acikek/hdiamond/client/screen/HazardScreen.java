@@ -2,6 +2,7 @@ package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.api.HazardDiamondAPI;
+import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
@@ -139,8 +140,8 @@ public class HazardScreen extends Screen {
         if (entity != null) {
             HDNetworking.c2sUpdatePanelData(entity, data);
         }
-        if (originalData != null) {
-            HazardDiamondAPI.EDIT_EVENT.invoker().onEdit(MinecraftClient.getInstance().player, originalData, data, id);
+        else if (originalData != null) {
+            HazardScreenEdited.EVENT.invoker().onEdit(MinecraftClient.getInstance().player, originalData, data, id);
         }
         super.close();
     }

@@ -5,6 +5,8 @@ import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.item.PanelItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AbstractRedstoneGateBlock;
@@ -59,6 +61,11 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
         getDataTracker().startTracking(HAZARD_DATA, HazardData.empty());
     }
 
+    @Environment(EnvType.CLIENT)
+    public void openScreen() {
+        MinecraftClient.getInstance().setScreen(new HazardScreen(this));
+    }
+
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         if (hand != Hand.MAIN_HAND) {
@@ -79,7 +86,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
             getDataTracker().set(WAXED, true);
         }
         else if (world.isClient()) {
-            MinecraftClient.getInstance().setScreen(new HazardScreen(this));
+            openScreen();
         }
         return ActionResult.success(world.isClient());
     }

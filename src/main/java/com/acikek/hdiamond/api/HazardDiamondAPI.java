@@ -16,8 +16,6 @@ import com.acikek.hdiamond.network.HDNetworking;
 import mcp.mobius.waila.api.ITooltip;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.event.Event;
-import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -88,16 +86,6 @@ import java.util.stream.Collectors;
 public class HazardDiamondAPI {
 
     /**
-     * Fired when a mutable {@link HazardScreen} has been closed by the client.
-     */
-    public static final Event<HazardScreenEdited> EDIT_EVENT = EventFactory.createArrayBacked(HazardScreenEdited.class,
-             handlers -> (player, original, updated, id) -> {
-                for (var handler : handlers) {
-                    handler.onEdit(player, original, updated, id);
-                }
-            });
-
-    /**
      * @param id the ID of the hazard data object
      * @return whether the data object exists and is loaded from a data pack source
      */
@@ -133,7 +121,7 @@ public class HazardDiamondAPI {
      * Opens a mutable {@link HazardScreen} on the client.
      * @param holder the original hazard data for the client to edit
      * @param id used to identify edited hazard screens
-     * @see HazardDiamondAPI#EDIT_EVENT
+     * @see HazardScreenEdited#EVENT
      */
     @Environment(EnvType.CLIENT)
     public static void openMutable(HazardDataHolder holder, Identifier id) {
