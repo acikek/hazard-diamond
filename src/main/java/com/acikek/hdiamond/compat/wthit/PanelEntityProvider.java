@@ -1,9 +1,9 @@
 package com.acikek.hdiamond.compat.wthit;
 
+import com.acikek.hdiamond.api.HazardDiamondAPI;
 import com.acikek.hdiamond.entity.PanelEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.text.Text;
 
 public class PanelEntityProvider implements IEntityComponentProvider, IServerDataProvider<PanelEntity> {
 
@@ -11,15 +11,9 @@ public class PanelEntityProvider implements IEntityComponentProvider, IServerDat
 
     @Override
     public void appendBody(ITooltip tooltip, IEntityAccessor accessor, IPluginConfig config) {
-        if (!config.getBoolean(HDiamondWailaPlugin.PANEL_INFO)) {
-            return;
+        if (config.getBoolean(HDiamondWailaPlugin.PANEL_INFO)) {
+            HazardDiamondAPI.appendWailaTooltip(accessor.getServerData(), tooltip::addLine);
         }
-        NbtCompound data = accessor.getServerData();
-        if (!data.contains("WNumerals")) {
-            return;
-        }
-        tooltip.addLine(Text.Serializer.fromJson(data.getString("WNumerals")));
-        tooltip.addLine(Text.Serializer.fromJson(data.getString("WPictograms")));
     }
 
     @Override
@@ -31,10 +25,6 @@ public class PanelEntityProvider implements IEntityComponentProvider, IServerDat
         if (hazardData.isEmpty()) {
             return;
         }
-        var tooltips = hazardData.getTooltip().stream()
-                .map(Text.Serializer::toJson)
-                .toList();
-        data.putString("WNumerals", tooltips.get(0));
-        data.putString("WPictograms", tooltips.get(1));
+        HazardDiamondAPI.appendWailaServerData(data, hazardData);
     }
 }

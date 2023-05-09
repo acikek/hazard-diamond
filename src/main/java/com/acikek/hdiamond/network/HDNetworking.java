@@ -2,6 +2,7 @@ package com.acikek.hdiamond.network;
 
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.api.HazardDiamondAPI;
+import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.entity.PanelEntity;
 import net.fabricmc.api.EnvType;
@@ -29,9 +30,9 @@ public class HDNetworking {
         ClientPlayNetworking.send(UPDATE_PANEL, buf);
     }
 
-    public static void s2cOpenScreen(Collection<ServerPlayerEntity> players, HazardData data) {
+    public static void s2cOpenScreen(Collection<ServerPlayerEntity> players, HazardDataHolder holder) {
         PacketByteBuf buf = PacketByteBufs.create();
-        data.write(buf);
+        holder.getHazardData().write(buf);
         for (var player : players) {
             ServerPlayNetworking.send(player, OPEN_SCREEN, buf);
         }

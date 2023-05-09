@@ -1,6 +1,7 @@
 package com.acikek.hdiamond.entity;
 
 import com.acikek.hdiamond.HDiamond;
+import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.item.PanelItem;
@@ -32,9 +33,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PanelEntity extends AbstractDecorationEntity {
+public class PanelEntity extends AbstractDecorationEntity implements HazardDataHolder {
 
     public static EntityType<PanelEntity> ENTITY_TYPE;
 
@@ -130,7 +132,8 @@ public class PanelEntity extends AbstractDecorationEntity {
         return getDataTracker().get(WAXED);
     }
 
-    public HazardData getHazardData() {
+    @Override
+    public @NotNull HazardData getHazardData() {
         return getDataTracker().get(HAZARD_DATA);
     }
 
