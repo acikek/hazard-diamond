@@ -47,4 +47,9 @@ public class QuadrantValue<E extends Enum<E> & QuadrantSection<E>> {
     public QuadrantValue<E> copy() {
         return new QuadrantValue<>(enumClass, value);
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }
