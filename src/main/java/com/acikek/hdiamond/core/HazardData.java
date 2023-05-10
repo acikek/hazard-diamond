@@ -13,10 +13,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.JsonHelper;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) implements HazardDataHolder {
 
@@ -35,8 +32,12 @@ public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) imple
     }
 
     public static HazardData fromJson(JsonObject obj) {
-        HazardDiamond diamond = HazardDiamond.fromJson(JsonHelper.getObject(obj, "diamond"));
-        Set<Pictogram> pictograms = Pictogram.fromJson(obj);
+        HazardDiamond diamond = obj.has("diamond")
+                ? HazardDiamond.fromJson(JsonHelper.getObject(obj, "diamond"))
+                : HazardDiamond.empty();
+        Set<Pictogram> pictograms = obj.has("pictograms")
+                ? Pictogram.fromJson(obj)
+                : Collections.emptySet();
         return new HazardData(diamond, pictograms);
     }
 

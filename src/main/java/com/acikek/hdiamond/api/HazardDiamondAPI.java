@@ -50,6 +50,16 @@ import java.util.stream.Collectors;
  * </p>
  *
  * <p>
+ *     The public {@code event} API package contains:
+ *     <ul>
+ *         <li>
+ *             {@link HazardScreenEdited} functional interface containing an {@link HazardScreenEdited#EVENT}
+ *             field that is able to be registered to on the client.
+ *         </li>
+ *     </ul>
+ * </p>
+ *
+ * <p>
  *     The public {@code block} API package contains:
  *     <ul>
  *         <li>
@@ -98,7 +108,7 @@ public class HazardDiamondAPI {
      * @throws IllegalStateException if the data object does not exist
      * @see HazardDiamondAPI#hasData(Identifier) 
      */
-    public static HazardData getData(Identifier id) {
+    public static @NotNull HazardData getData(Identifier id) {
         var result = HazardDiamondAPIImpl.getData(id);
         if (result == null) {
             throw new IllegalStateException("hazard data '" + id + "' does not exist");
