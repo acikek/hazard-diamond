@@ -24,15 +24,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -116,7 +118,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     }
 
     @Override
-    public Packet<?> createSpawnPacket() {
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
         return new EntitySpawnS2CPacket(this, facing.getId(), getDecorationBlockPos());
     }
 
@@ -182,7 +184,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
 
     public static void register() {
         ENTITY_TYPE = Registry.register(
-                Registry.ENTITY_TYPE,
+                Registries.ENTITY_TYPE,
                 HDiamond.id("panel"),
                 FabricEntityTypeBuilder.<PanelEntity>create(SpawnGroup.MISC, PanelEntity::new)
                         .dimensions(EntityDimensions.fixed(1.0f, 1.0f))

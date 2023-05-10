@@ -9,9 +9,10 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
-import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.recipe.book.RecipeCategory;
 
 import java.util.function.Consumer;
 
@@ -19,10 +20,12 @@ public class HDDatagen implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-        fabricDataGenerator.addProvider(generator -> new FabricRecipeProvider(generator) {
+        var pack = fabricDataGenerator.createPack();
+
+        pack.addProvider((output, $) -> new FabricRecipeProvider(output) {
             @Override
-            protected void generateRecipes(Consumer<RecipeJsonProvider> exporter) {
-                ShapedRecipeJsonBuilder.create(PanelItem.INSTANCE, 4)
+            public void generate(Consumer<RecipeJsonProvider> exporter) {
+                ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, PanelItem.INSTANCE, 4)
                         .criterion("has_dye", RecipeProvider.conditionsFromTag(ConventionalItemTags.DYES))
                         .criterion("has_iron", RecipeProvider.conditionsFromTag(ConventionalItemTags.IRON_INGOTS))
                         .pattern(" R ")
@@ -37,7 +40,7 @@ public class HDDatagen implements DataGeneratorEntrypoint {
             }
         });
 
-        fabricDataGenerator.addProvider(generator -> new FabricModelProvider(generator) {
+        pack.addProvider((output, $) -> new FabricModelProvider(output) {
             @Override
             public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
                 // Empty

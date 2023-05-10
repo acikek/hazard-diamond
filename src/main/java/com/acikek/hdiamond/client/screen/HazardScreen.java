@@ -1,13 +1,12 @@
 package com.acikek.hdiamond.client.screen;
 
 import com.acikek.hdiamond.HDiamond;
-import com.acikek.hdiamond.api.HazardDiamondAPI;
 import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.core.HazardData;
-import com.acikek.hdiamond.core.quadrant.QuadrantValue;
-import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
+import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
+import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.entity.PanelEntity;
 import com.acikek.hdiamond.network.HDNetworking;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -76,7 +75,7 @@ public class HazardScreen extends Screen {
     }
 
     public static void setTexture() {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
     }

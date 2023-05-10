@@ -21,7 +21,7 @@ public abstract class DiamondWidget extends ButtonWidget {
     public Polygon diamond;
 
     public DiamondWidget(HazardScreen screen, int x, int y, int width, int height, Text message, PressAction action) {
-        super(x, y, width, height, message, action);
+        super(x, y, width, height, message, action, ButtonWidget.DEFAULT_NARRATION_SUPPLIER);
         this.screen = screen;
         this.diamond = new Polygon(
                 new int[] { x, x + width / 2, x + width, x + width / 2 },
@@ -33,6 +33,8 @@ public abstract class DiamondWidget extends ButtonWidget {
     public DiamondWidget(HazardScreen screen, int halfX, int halfY, int size, Text message, PressAction action) {
         this(screen, (halfX * 2) + 1, (halfY * 2) + 1, size, size, message, action);
     }
+
+    public abstract void renderTooltip(MatrixStack matrices, int mouseX, int mouseY);
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {

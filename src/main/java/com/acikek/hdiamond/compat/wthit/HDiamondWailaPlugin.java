@@ -1,7 +1,6 @@
 package com.acikek.hdiamond.compat.wthit;
 
 import com.acikek.hdiamond.HDiamond;
-import com.acikek.hdiamond.entity.PanelEntity;
 import mcp.mobius.waila.api.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

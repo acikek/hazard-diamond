@@ -16,7 +16,7 @@ import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
@@ -43,7 +43,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
         matrices.push();
         //matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getPitch()));
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180 - entity.getYaw()));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - entity.getYaw()));
         matrices.translate(0, 0, -0.5f + 1.0f / 32.0f);
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
