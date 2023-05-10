@@ -1,5 +1,5 @@
 {
-  "item.hdiamond.panel_item": "Hazard Diamond",
+  "item.hdiamond.panel_item": "Diamante de peligro",
   "entity.hdiamond.panel": "Diamante de peligro",
   "gui.hdiamond.hazard_screen.title": "Identificaciones de peligrosos",
   "tooltip.hdiamond.panel_item.pictograms": "%s pictograma(s)",
@@ -10,7 +10,7 @@
   "quadrant.hdiamond.fire.inflammable.name": "No inflamable",
   "quadrant.hdiamond.fire.inflammable.description": "No va quemarse.",
   "quadrant.hdiamond.fire.above_93c.name": "Sobre 93°C",
-  "quadrant.hdiamond.fire.above_93c.description": "Debe precalentarse antes de que ocurra la ignición",
+  "quadrant.hdiamond.fire.above_93c.description": "Debe precalentarse antes de que ocurra la ignición.",
   "quadrant.hdiamond.fire.below_93c.name": "Debajo de 93°C",
   "quadrant.hdiamond.fire.below_93c.description": "Debe exponerse a temperaturas altas antes de que ocurra la ignición.",
   "quadrant.hdiamond.fire.below_37c.name": "Debajo de 37°C",
