@@ -5,7 +5,7 @@
   "tooltip.hdiamond.panel_item.pictograms": "%s pictogram(s)",
   "config.waila.plugin_hdiamond": "Hazard Diamond",
   "config.waila.plugin_hdiamond.entity_info": "Hazard Entity Info",
-  "config.waila.plugin_hdiamond.block_info": "Hazard Block info",
+  "config.waila.plugin_hdiamond.block_info": "Hazard Block Info",
   "quadrant.hdiamond.fire.type": "Fire Hazard",
   "quadrant.hdiamond.fire.inflammable.name": "Inflammable",
   "quadrant.hdiamond.fire.inflammable.description": "Will not burn.",
