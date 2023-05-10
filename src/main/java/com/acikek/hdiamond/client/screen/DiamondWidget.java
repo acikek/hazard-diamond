@@ -3,6 +3,7 @@ package com.acikek.hdiamond.client.screen;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -34,7 +35,9 @@ public abstract class DiamondWidget extends ButtonWidget {
         this(screen, (halfX * 2) + 1, (halfY * 2) + 1, size, size, message, action);
     }
 
-    public abstract void renderTooltip(MatrixStack matrices, int mouseX, int mouseY);
+    public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -92,6 +95,7 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+            super.renderTooltip(matrices, mouseX, mouseY);
             renderDiamondTooltip(quadrant.get(), matrices, mouseX, mouseY, false);
         }
     }
@@ -119,6 +123,7 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+            super.renderTooltip(matrices, mouseX, mouseY);
             renderDiamondTooltip(pictogram, matrices, mouseX, mouseY, !screen.data.pictograms().contains(pictogram));
         }
     }
