@@ -13,7 +13,7 @@ public record HazardDiamond(
         QuadrantValue<SpecificHazard> specific) {
 
     public static HazardDiamond empty() {
-        return new HazardDiamond(FireHazard.INFLAMMABLE, HealthHazard.NORMAL, Reactivity.STABLE, SpecificHazard.NONE);
+        return new HazardDiamond(FireHazard.NONFLAMMABLE, HealthHazard.NORMAL, Reactivity.STABLE, SpecificHazard.NONE);
     }
 
     public HazardDiamond(FireHazard fire, HealthHazard health, Reactivity reactivity, SpecificHazard specific) {
