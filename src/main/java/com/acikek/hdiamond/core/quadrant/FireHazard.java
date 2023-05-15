@@ -11,7 +11,7 @@ public enum FireHazard implements QuadrantSection<FireHazard> {
     /**
      * Will not burn.
      */
-    INFLAMMABLE,
+    NONFLAMMABLE,
     /**
      * Must be preheated before ignition can occur.
      * This is defined as burning only above 93 degrees Celsius.
