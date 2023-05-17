@@ -31,21 +31,20 @@ public enum SpecificHazard implements QuadrantSection<SpecificHazard> {
      */
     RADIOACTIVE;
 
-    private final Texture texture = get();
+    private Texture texture = null;
 
     @Override
     public SpecificHazard getValue() {
         return this;
     }
 
-    private Texture get() {
-        return this == SpecificHazard.RADIOACTIVE
-                ? new Texture(256 - 20, 256, 20, 20)
-                : new Texture(64 + (ordinal() - 1) * 18, 42, 18, 14);
-    }
-
     @Override
     public Texture getTexture() {
+        if (texture == null) {
+            texture = this == SpecificHazard.RADIOACTIVE
+                    ? new Texture(256 - 20, 256, 20, 20)
+                    : new Texture(64 + (ordinal() - 1) * 18, 42, 18, 14);
+        }
         return texture;
     }
 
