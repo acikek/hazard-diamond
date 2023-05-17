@@ -1,14 +1,16 @@
 package com.acikek.hdiamond.client.render;
 
 import com.acikek.hdiamond.HDiamond;
+import com.acikek.hdiamond.client.HDiamondClient;
+import com.acikek.hdiamond.core.quadrant.FireHazard;
+import com.acikek.hdiamond.core.quadrant.HealthHazard;
+import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.entity.PanelEntity;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -17,6 +19,9 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
@@ -42,8 +47,20 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         int lightFront = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
 
         matrices.push();
-        //matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getPitch()));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - entity.getYaw()));
+
+        matrices.push();
+        renderPanel(matrices, vertexConsumers, lightFront);
+        matrices.pop();
+
+        matrices.push();
+        renderIcons(matrices, vertexConsumers, lightFront);
+        matrices.pop();
+
+        matrices.pop();
+    }
+
+    public void renderPanel(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int lightFront) {
         matrices.translate(0, 0, -0.5f + 1.0f / 32.0f);
         matrices.translate(-0.5f, -0.5f, -0.5f);
 
@@ -52,8 +69,61 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
                 null, BakedModelManagerHelper.getModel(modelManager, PANEL_MODEL),
                 1.0f, 1.0f, 1.0f, lightFront, OverlayTexture.DEFAULT_UV
         );
+    }
 
-        matrices.pop();
+    public void renderIcon(VertexConsumer buffer, Matrix4f pos, Vector3f normal, DiamondSection<?> section, int x1, int y1, int light) {
+        var texture = section.getTexture();
+        int x2 = x1 + texture.width();
+        int y2 = y1 + texture.height();
+        float u1 = texture.u() / 256.0f;
+        float v1 = texture.v() / 256.0f;
+        float u2 = (texture.u() + texture.width()) / 256.0f;
+        float v2 = (texture.v() + texture.height()) / 256.0f;
+
+        float nx = normal.x();
+        float ny = normal.y();
+        float nz = normal.z(); // kiwi
+
+        buffer.vertex(pos, x1, y1, 0.0f).color(0xFFFFFFFF).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
+        buffer.vertex(pos, x1, y2, 0.0f).color(0xFFFFFFFF).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
+        buffer.vertex(pos, x2, y2, 0.0f).color(0xFFFFFFFF).texture(u2, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
+        buffer.vertex(pos, x2, y1, 0.0f).color(0xFFFFFFFF).texture(u2, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
+    }
+
+    public void renderIcons(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int lightFront) {
+        float scale = 1.0f / 64.0f;
+        //matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
+        matrices.scale(-scale, -scale, -scale);
+        matrices.translate(-32.0f, -32.0f, -0.75f);
+
+        var entry = matrices.peek();
+        Matrix4f pos = entry.getPositionMatrix();
+        Matrix3f normal = entry.getNormalMatrix();
+        Vector3f vec3f = normal.transform(new Vector3f(0, 1, 0));
+
+        //RenderSystem.setShaderTexture(0, HDiamondClient.WIDGETS);
+        RenderSystem.setShader(GameRenderer::getPositionTexColorNormalProgram);
+        //RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.enableCull();
+        RenderSystem.enableDepthTest();
+        RenderSystem.enableBlend();
+        //RenderSystem.defaultBlendFunc();
+
+        //HDiamondClient.renderElement(matrices, FireHazard.ABOVE_93C, 1, 0);
+
+        var buffer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(HDiamondClient.WIDGETS));
+        renderIcon(buffer, pos, vec3f, FireHazard.ABOVE_93C, 27, 8, lightFront);
+        renderIcon(buffer, pos, vec3f, HealthHazard.EXTREME, 9, 24, lightFront);
+
+        /*
+        float color = lightFront / 16.0f;
+        //RenderSystem.setShaderColor(color, color, color, 1.0f);
+
+
+        matrices.translate(-6.0f, -27.5f, 0.0f);
+        HDiamondClient.renderElement(matrices, FireHazard.ABOVE_93C, 1, 0);*/
+
+
     }
 
     @Override

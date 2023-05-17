@@ -34,6 +34,8 @@ public enum FireHazard implements QuadrantSection<FireHazard> {
      */
     BELOW_25C;
 
+    private final Texture texture = Texture.numeral(0, ordinal());
+
     @Override
     public FireHazard getValue() {
         return this;
@@ -41,7 +43,7 @@ public enum FireHazard implements QuadrantSection<FireHazard> {
 
     @Override
     public Texture getTexture() {
-        return Texture.numeral(0, ordinal());
+        return texture;
     }
 
     @Override

@@ -31,6 +31,8 @@ public enum Reactivity implements QuadrantSection<Reactivity> {
      */
     READILY_DETONATES;
 
+    private final Texture texture = Texture.numeral(2, ordinal());
+
     @Override
     public Reactivity getValue() {
         return this;
@@ -38,7 +40,7 @@ public enum Reactivity implements QuadrantSection<Reactivity> {
 
     @Override
     public Texture getTexture() {
-        return Texture.numeral(2, ordinal());
+        return texture;
     }
 
     @Override

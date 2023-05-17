@@ -29,6 +29,8 @@ public enum HealthHazard implements QuadrantSection<HealthHazard> {
      */
     DEADLY;
 
+    private final Texture texture = Texture.numeral(1, ordinal());
+
     @Override
     public HealthHazard getValue() {
         return this;
@@ -36,7 +38,7 @@ public enum HealthHazard implements QuadrantSection<HealthHazard> {
 
     @Override
     public Texture getTexture() {
-        return Texture.numeral(1, ordinal());
+        return texture;
     }
 
     @Override

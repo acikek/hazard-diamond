@@ -1,7 +1,7 @@
 package com.acikek.hdiamond.client.screen;
 
-import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.api.event.HazardScreenEdited;
+import com.acikek.hdiamond.client.HDiamondClient;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
@@ -18,8 +18,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class HazardScreen extends Screen {
-
-    public static final Identifier TEXTURE = HDiamond.id("textures/gui/hazards.png");
 
     public int x;
     public int y;
@@ -77,7 +75,7 @@ public class HazardScreen extends Screen {
     public static void setTexture() {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+        RenderSystem.setShaderTexture(0, HDiamondClient.WIDGETS);
     }
 
     public void renderPanel(MatrixStack matrices) {
