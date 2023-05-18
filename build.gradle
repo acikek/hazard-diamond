@@ -23,10 +23,6 @@ repositories {
         }
     }
 
-    maven {
-        url "https://jitpack.io"
-    }
-
     mavenCentral()
 }
 
@@ -51,9 +47,6 @@ dependencies {
 
     // ModMenu
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
-    // MicroConfig
-    modImplementation include("com.github.P03W:Microconfig:${project.microconfig_version}")
 }
 
 loom {

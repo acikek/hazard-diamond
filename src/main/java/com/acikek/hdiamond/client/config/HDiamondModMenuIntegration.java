@@ -18,6 +18,7 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
         @Override
         public void setValue(Boolean value) {
             HDiamondClient.config.renderFull = value;
+            HDiamondClient.config.write();
         }
 
         @Override
@@ -48,7 +49,6 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        System.out.println("bruh");
         return !FabricLoader.getInstance().isModLoaded("yet_another_config_lib")
                 ? screen -> null
                 : screen -> createConfig().generateScreen(screen);

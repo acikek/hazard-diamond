@@ -4,7 +4,6 @@ import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.client.config.HDiamondConfig;
 import com.acikek.hdiamond.client.render.PanelEntityRenderer;
 import com.acikek.hdiamond.network.HDNetworking;
-import mc.microconfig.MicroConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,6 +20,6 @@ public class HDiamondClient implements ClientModInitializer {
     public void onInitializeClient() {
         PanelEntityRenderer.register();
         HDNetworking.registerClient();
-        config = MicroConfig.getOrCreate("hdiamond", new HDiamondConfig());
+        config = HDiamondConfig.read();
     }
 }
