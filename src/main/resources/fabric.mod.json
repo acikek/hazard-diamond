@@ -25,6 +25,9 @@
     ],
     "fabric-datagen": [
       "com.acikek.hdiamond.datagen.HDDatagen"
+    ],
+    "modmenu": [
+      "com.acikek.hdiamond.client.config.HDiamondModMenuIntegration"
     ]
   },
   "mixins": [
