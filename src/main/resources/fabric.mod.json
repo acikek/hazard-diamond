@@ -25,6 +25,9 @@
     ],
     "fabric-datagen": [
       "com.acikek.hdiamond.datagen.HDDatagen"
+    ],
+    "modmenu": [
+      "com.acikek.hdiamond.client.config.HDiamondModMenuIntegration"
     ]
   },
   "mixins": [
@@ -34,5 +37,8 @@
     "fabricloader": ">=0.14.12",
     "fabric": "*",
     "minecraft": "1.19.4"
+  },
+  "suggests": {
+    "yet_another_config_lib": "^2.5.0+1.19.4"
   }
 }

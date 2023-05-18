@@ -54,9 +54,11 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         renderPanel(matrices, vertexConsumers, lightFront);
         matrices.pop();
 
-        matrices.push();
-        renderIcons(entity.getHazardData().diamond(), matrices, vertexConsumers, lightFront);
-        matrices.pop();
+        if (HDiamondClient.config.renderFull) {
+            matrices.push();
+            renderIcons(entity.getHazardData().diamond(), matrices, vertexConsumers, lightFront);
+            matrices.pop();
+        }
 
         matrices.pop();
     }
