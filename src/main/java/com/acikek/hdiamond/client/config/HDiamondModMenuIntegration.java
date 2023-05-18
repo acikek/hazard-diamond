@@ -49,7 +49,7 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return !FabricLoader.getInstance().isModLoaded("yet_another_config_lib")
+        return !FabricLoader.getInstance().isModLoaded("yet-another-config-lib")
                 ? screen -> null
                 : screen -> createConfig().generateScreen(screen);
     }

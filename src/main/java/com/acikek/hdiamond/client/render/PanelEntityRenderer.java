@@ -17,10 +17,9 @@ import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import net.minecraft.util.math.Matrix3f;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 
 public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
@@ -48,7 +47,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         int lightFront = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
 
         matrices.push();
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - entity.getYaw()));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180 - entity.getYaw()));
 
         matrices.push();
         renderPanel(matrices, vertexConsumers, lightFront);
@@ -74,7 +73,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         );
     }
 
-    public void renderIcon(VertexConsumer buffer, Matrix4f pos, Vector3f normal, DiamondSection<?> section, int x1, int y1, int light) {
+    public void renderIcon(VertexConsumer buffer, Matrix4f pos, Vec3f normal, DiamondSection<?> section, int x1, int y1, int light) {
         var texture = section.getTexture();
         int x2 = x1 + texture.width();
         int y2 = y1 + texture.height();
@@ -83,9 +82,9 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         float u2 = (texture.u() + texture.width()) / 256.0f;
         float v2 = (texture.v() + texture.height()) / 256.0f;
 
-        float nx = normal.x();
-        float ny = normal.y();
-        float nz = normal.z(); // kiwi
+        float nx = normal.getX();
+        float ny = normal.getY();
+        float nz = normal.getZ(); // kiwi
 
         buffer.vertex(pos, x1, y1, 0.0f).color(0xFFFFFFFF).texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
         buffer.vertex(pos, x1, y2, 0.0f).color(0xFFFFFFFF).texture(u1, v2).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(nx, ny, nz).next();
@@ -100,7 +99,8 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         var entry = matrices.peek();
         Matrix4f pos = entry.getPositionMatrix();
         Matrix3f normal = entry.getNormalMatrix();
-        Vector3f vec3f = normal.transform(new Vector3f(0, 1, 0));
+        Vec3f vec3f = new Vec3f(0, 1, 0);
+        vec3f.transform(normal);
 
         var buffer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(HDiamondClient.WIDGETS));
         renderIcon(buffer, pos, vec3f, diamond.fire().get(), 26, 9, lightFront);
