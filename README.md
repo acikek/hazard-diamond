@@ -69,7 +69,7 @@ Ethanol is a widespread yet potentially dangerous chemical. This gigantic vat of
 > **Note**: You'll know if the diamond was edited successfully when the hammering sound effect plays.
 - When you're done editing a Hazard Diamond, sneak-interact on the entity while holding a honeycomb to **wax** it.
     - Interacting with the entity at this point will bring up the same screen in an **immutable** state.
-- If you have [WTHIT](https://modrinth.com/mod/wthit) installed, you can view the Hazard Data outside of the screen.
+- If you have [WTHIT](https://modrinth.com/mod/wthit) installed, you can also view the Hazard Data in the tooltip.
 
 ## 📚 Library
 
