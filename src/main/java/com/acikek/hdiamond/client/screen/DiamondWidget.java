@@ -5,9 +5,9 @@ import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.section.DiamondSection;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -35,26 +35,26 @@ public abstract class DiamondWidget extends ButtonWidget {
         this(screen, (halfX * 2) + 1, (halfY * 2) + 1, size, size, message, action);
     }
 
-    public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+    public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         hovered = isMouseOver(mouseX, mouseY);
         if (hovered) {
-            renderTooltip(matrices, mouseX, mouseY);
+            renderTooltip(context, mouseX, mouseY);
         }
     }
 
-    public void renderDiamondTooltip(DiamondSection<?> section, MatrixStack matrices, int mouseX, int mouseY, boolean off) {
+    public void renderDiamondTooltip(DiamondSection<?> section, DrawContext context, int mouseX, int mouseY, boolean off) {
         if (!screen.movedCursor) {
             return;
         }
         List<Text> tooltip = new ArrayList<>();
         tooltip.add(section.getTitle().styled(style -> off ? style.withFormatting(Formatting.GRAY) : style));
         tooltip.add(section.getDescription().formatted(off ? Formatting.DARK_GRAY : Formatting.GRAY));
-        screen.renderTooltip(matrices, tooltip, mouseX, mouseY);
+        context.drawTooltip(MinecraftClient.getInstance().textRenderer, tooltip, mouseX, mouseY);
     }
 
     @Override
@@ -94,9 +94,9 @@ public abstract class DiamondWidget extends ButtonWidget {
         }
 
         @Override
-        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-            super.renderTooltip(matrices, mouseX, mouseY);
-            renderDiamondTooltip(quadrant.get(), matrices, mouseX, mouseY, false);
+        public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+            super.renderTooltip(context, mouseX, mouseY);
+            renderDiamondTooltip(quadrant.get(), context, mouseX, mouseY, false);
         }
     }
 
@@ -122,9 +122,9 @@ public abstract class DiamondWidget extends ButtonWidget {
         }
 
         @Override
-        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY) {
-            super.renderTooltip(matrices, mouseX, mouseY);
-            renderDiamondTooltip(pictogram, matrices, mouseX, mouseY, !screen.data.pictograms().contains(pictogram));
+        public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+            super.renderTooltip(context, mouseX, mouseY);
+            renderDiamondTooltip(pictogram, context, mouseX, mouseY, !screen.data.pictograms().contains(pictogram));
         }
     }
 }

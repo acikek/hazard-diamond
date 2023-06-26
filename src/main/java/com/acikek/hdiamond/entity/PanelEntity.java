@@ -87,10 +87,10 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
             playSound(SoundEvents.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
             getDataTracker().set(WAXED, true);
         }
-        else if (world.isClient()) {
+        else if (getWorld().isClient()) {
             openScreen();
         }
-        return ActionResult.success(world.isClient());
+        return ActionResult.success(getWorld().isClient());
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
 
     @Override
     public void onBreak(@Nullable Entity entity) {
-        if (!world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+        if (!getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             return;
         }
         dropStack(getPickBlockStack());
@@ -130,11 +130,11 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
 
     @Override
     public boolean canStayAttached() {
-        if (!world.isSpaceEmpty(this)) {
+        if (!getWorld().isSpaceEmpty(this)) {
             return false;
         }
-        BlockState blockState = world.getBlockState(attachmentPos.offset(facing.getOpposite()));
-        return blockState.getMaterial().isSolid() || facing.getAxis().isHorizontal() && AbstractRedstoneGateBlock.isRedstoneGate(blockState);
+        BlockState blockState = getWorld().getBlockState(attachmentPos.offset(facing.getOpposite()));
+        return blockState.isSolid() || facing.getAxis().isHorizontal() && AbstractRedstoneGateBlock.isRedstoneGate(blockState);
     }
 
     public boolean isWaxed() {

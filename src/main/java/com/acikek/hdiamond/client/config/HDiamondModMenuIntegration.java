@@ -3,11 +3,8 @@ package com.acikek.hdiamond.client.config;
 import com.acikek.hdiamond.client.HDiamondClient;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import dev.isxander.yacl.api.Binding;
-import dev.isxander.yacl.api.ConfigCategory;
-import dev.isxander.yacl.api.Option;
-import dev.isxander.yacl.api.YetAnotherConfigLib;
-import dev.isxander.yacl.gui.controllers.TickBoxController;
+import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 
@@ -37,11 +34,12 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
                 .title(Text.literal("Hazard Diamond"))
                 .category(ConfigCategory.createBuilder()
                         .name(Text.translatable("entity.hdiamond.panel"))
-                        .option(Option.createBuilder(Boolean.class)
+                        .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("config.hdiamond.render_full.name"))
-                                .tooltip(Text.translatable("config.hdiamond.render_full.description"))
+                                .description(OptionDescription.of(Text.translatable("config.hdiamond.render_full.description")))
+                                .flag(OptionFlag.WORLD_RENDER_UPDATE)
                                 .binding(RENDER_FULL)
-                                .controller(TickBoxController::new)
+                                .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
                 .build();
@@ -49,7 +47,7 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return !FabricLoader.getInstance().isModLoaded("yet_another_config_lib")
+        return !FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")
                 ? screen -> null
                 : screen -> createConfig().generateScreen(screen);
     }

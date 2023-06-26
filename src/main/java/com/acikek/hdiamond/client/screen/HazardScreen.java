@@ -11,9 +11,8 @@ import com.acikek.hdiamond.entity.PanelEntity;
 import com.acikek.hdiamond.network.HDNetworking;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -72,56 +71,49 @@ public class HazardScreen extends Screen {
         }
     }
 
-    public static void setTexture() {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, HDiamondClient.WIDGETS);
+    public void renderPanel(DrawContext context) {
+        context.drawTexture(HDiamondClient.WIDGETS, x, y - 50, 0, 0, 64, 64);
     }
 
-    public void renderPanel(MatrixStack matrices) {
-        drawTexture(matrices, x, y - 50, 0, 0, 64, 64);
-    }
-
-    public void renderElement(MatrixStack matrices, DiamondSection<?> element, int x, int y) {
+    public void renderElement(DrawContext context, DiamondSection<?> element, int x, int y) {
         var texture = element.getTexture();
-        drawTexture(matrices, x, y, texture.u(), texture.v(), texture.width(), texture.height());
+        context.drawTexture(HDiamondClient.WIDGETS, x, y, texture.u(), texture.v(), texture.width(), texture.height());
     }
 
-    public void renderQuadrants(MatrixStack matrices) {
-        renderElement(matrices, data.diamond().fire().get(), x + 26, y - 41);
-        renderElement(matrices, data.diamond().health().get(), x + 10, y - 25);
-        renderElement(matrices, data.diamond().reactivity().get(), x + 42, y - 25);
+    public void renderQuadrants(DrawContext context) {
+        renderElement(context, data.diamond().fire().get(), x + 26, y - 41);
+        renderElement(context, data.diamond().health().get(), x + 10, y - 25);
+        renderElement(context, data.diamond().reactivity().get(), x + 42, y - 25);
         SpecificHazard specific = data.diamond().specific().get();
         if (specific != SpecificHazard.NONE) {
             var rad = specific == SpecificHazard.RADIOACTIVE;
-            renderElement(matrices, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
+            renderElement(context, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0));
         }
     }
 
-    public void renderPictogram(MatrixStack matrices, Pictogram pictogram, int x, int y) {
+    public void renderPictogram(DrawContext context, Pictogram pictogram, int x, int y) {
         float color = data.pictograms().contains(pictogram) ? 1.0f : 0.5f;
         RenderSystem.setShaderColor(color, color, color, 1.0f);
-        renderElement(matrices, pictogram, x, y);
+        renderElement(context, pictogram, x, y);
     }
 
-    public void renderPictograms(MatrixStack matrices) {
+    public void renderPictograms(DrawContext context) {
         for (int i = 0; i < Pictogram.values().length; i++) {
             Pictogram pictogram = Pictogram.values()[i];
-            renderPictogram(matrices, pictogram, x - 56 + i * 18, y + 4 + (i % 2 == 0 ? 18 : 0));
+            renderPictogram(context, pictogram, x - 56 + i * 18, y + 4 + (i % 2 == 0 ? 18 : 0));
         }
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
-        setTexture();
-        matrices.push();
-        matrices.scale(2.0f, 2.0f, 1.0f);
-        renderPanel(matrices);
-        renderQuadrants(matrices);
-        renderPictograms(matrices);
-        matrices.pop();
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        renderBackground(context);
+        context.getMatrices().push();
+        context.getMatrices().scale(2.0f, 2.0f, 1.0f);
+        renderPanel(context);
+        renderQuadrants(context);
+        renderPictograms(context);
+        context.getMatrices().pop();
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
