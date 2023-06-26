@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IBlockComponentProvider, IServerDataProvider<T> {
+public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IBlockComponentProvider, IDataProvider<T> {
 
     public static final HazardDataHolderProvider<Entity> ENTITY = new HazardDataHolderProvider<>(HDiamondWailaPlugin.ENTITY_INFO);
     public static final HazardDataHolderProvider<Block> BLOCK = new HazardDataHolderProvider<>(HDiamondWailaPlugin.BLOCK_INFO);
@@ -22,19 +22,19 @@ public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IB
     @Override
     public void appendBody(ITooltip tooltip, IEntityAccessor accessor, IPluginConfig config) {
         if (config.getBoolean(HDiamondWailaPlugin.ENTITY_INFO)) {
-            HazardDiamondAPI.appendWailaTooltip(accessor.getServerData(), tooltip::addLine);
+            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), tooltip::addLine);
         }
     }
 
     @Override
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         if (config.getBoolean(HDiamondWailaPlugin.BLOCK_INFO)) {
-            HazardDiamondAPI.appendWailaTooltip(accessor.getServerData(), tooltip::addLine);
+            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), tooltip::addLine);
         }
     }
 
     @Override
-    public void appendServerData(NbtCompound data, IServerAccessor<T> accessor, IPluginConfig config) {
+    public void appendData(IDataWriter data, IServerAccessor<T> accessor, IPluginConfig config) {
         if (!config.getBoolean(option)) {
             return;
         }
@@ -43,7 +43,7 @@ public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IB
             if (hazardData.isEmpty()) {
                 return;
             }
-            HazardDiamondAPI.appendWailaServerData(data, hazardData);
+            HazardDiamondAPI.appendWailaServerData(data.raw(), hazardData);
         }
     }
 }
