@@ -5,6 +5,7 @@ import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.api.impl.HazardDiamondAPIImpl;
 import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.screen.HazardScreen;
+import com.acikek.hdiamond.client.screen.HazardScreenData;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.HazardDiamond;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
@@ -43,8 +44,6 @@ import java.util.stream.Collectors;
  *     <ul>
  *         <li>
  *             {@link HazardDataHolder} interface signifying that an object contains {@link HazardData}.
- *             Objects implementing this interface can be used within the main API methods such as
- *             {@link HazardDiamondAPI#open(HazardDataHolder)}.
  *         </li>
  *     </ul>
  * </p>
@@ -118,29 +117,37 @@ public class HazardDiamondAPI {
 
     /**
      * Opens an immutable {@link HazardScreen} on the client.
-     * @param holder the holder of the hazard data object to display
+     * @param data the hazard data to display
      */
     @Environment(EnvType.CLIENT)
-    public static void open(HazardDataHolder holder) {
-        HazardDiamondAPIImpl.setScreen(new HazardScreen(holder.getHazardData()));
+    public static void open(HazardData data) {
+        HazardDiamondAPIImpl.setScreen(new HazardScreen(HazardScreenData.immutable(data)));
+    }
+
+    /**
+     * Opens an immutable {@link HazardScreen} on the client with blank starting data.
+     * @see HazardDiamondAPI#open(HazardData)
+     */
+    public static void open() {
+        open(HazardData.empty());
     }
 
     /**
      * Opens a mutable {@link HazardScreen} on the client.
-     * @param holder the original hazard data for the client to edit
+     * @param data the original hazard data for the client to edit
      * @param id used to identify edited hazard screens
      * @throws NullPointerException if the id is null
      * @see HazardScreenEdited#EVENT
      */
     @Environment(EnvType.CLIENT)
-    public static void openMutable(HazardDataHolder holder, @NotNull Identifier id) {
+    public static void openMutable(HazardData data, @NotNull Identifier id) {
         Objects.requireNonNull(id);
-        HazardDiamondAPIImpl.setScreen(new HazardScreen(holder.getHazardData(), id));
+        HazardDiamondAPIImpl.setScreen(new HazardScreen(new HazardScreenData(id, data)));
     }
 
     /**
      * Opens a mutable {@link HazardScreen} on the client with blank starting data.
-     * @see HazardDiamondAPI#openMutable(HazardDataHolder, Identifier) 
+     * @deprecated use {@link HazardDiamondAPI#openMutable(HazardData, Identifier)} with {@link HazardData#empty()}
      */
     @Environment(EnvType.CLIENT)
     public static void openMutable(Identifier id) {
@@ -150,17 +157,17 @@ public class HazardDiamondAPI {
     /**
      * Opens an immutable {@link HazardScreen} on the specified players' clients.
      * @param players the players to target
-     * @param holder the holder of the hazard data object to display
+     * @param data the hazard data to display
      */
-    public static void open(Collection<ServerPlayerEntity> players, HazardDataHolder holder) {
-        HDNetworking.s2cOpenScreen(players, holder);
+    public static void open(Collection<ServerPlayerEntity> players, HazardData data) {
+        HDNetworking.s2cOpenScreen(players, data);
     }
 
     /**
-     * @see HazardDiamondAPI#open(Collection, HazardDataHolder)
+     * @see HazardDiamondAPI#open(Collection, HazardData)
      */
-    public static void open(ServerPlayerEntity player, HazardDataHolder holder) {
-        open(Collections.singletonList(player), holder);
+    public static void open(ServerPlayerEntity player, HazardData data) {
+        open(Collections.singletonList(player), data);
     }
 
     /**
@@ -208,10 +215,10 @@ public class HazardDiamondAPI {
     }
 
     /**
-     * Appends {@code WAILA} data converted from the specified holder to the NBT compound.
+     * Appends {@code WAILA} data converted from the specified hazard data to the NBT compound.
      */
-    public static void appendWailaServerData(NbtCompound nbt, HazardDataHolder holder) {
-        var tooltips = holder.getHazardData().getTooltip().stream()
+    public static void appendWailaServerData(NbtCompound nbt, HazardData data) {
+        var tooltips = data.getTooltip().stream()
                 .map(Text.Serializer::toJson)
                 .toList();
         nbt.putString("WNumerals", tooltips.get(0));

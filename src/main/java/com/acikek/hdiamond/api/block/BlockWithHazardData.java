@@ -31,12 +31,27 @@ public class BlockWithHazardData extends Block implements HazardDataHolder {
     }
 
     @Override
+    public boolean isEditable() {
+        return false;
+    }
+
+    @Override
+    public void updateHazardData(HazardData data) {
+
+    }
+
+    @Override
+    public void setHazardData(HazardData data) {
+
+    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (hand != Hand.MAIN_HAND) {
             return ActionResult.PASS;
         }
         if (world.isClient()) {
-            HazardDiamondAPI.open(this);
+            HazardDiamondAPI.open(data);
         }
         return ActionResult.success(world.isClient());
     }

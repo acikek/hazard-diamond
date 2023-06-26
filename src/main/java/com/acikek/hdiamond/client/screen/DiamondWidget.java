@@ -85,7 +85,7 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         public Quadrant(HazardScreen screen, QuadrantValue<?> quadrant, int halfX, int halfY, int size) {
             super(screen, halfX, halfY, size, quadrant.get().getTitle(), button -> {
-                if (screen.isEditable) {
+                if (screen.holder.isEditable()) {
                     quadrant.scroll();
                     playSound();
                 }
@@ -106,7 +106,7 @@ public abstract class DiamondWidget extends ButtonWidget {
 
         public PictogramLabel(HazardScreen screen, Pictogram pictogram, int halfX, int halfY, int size) {
             super(screen, halfX, halfY, size, pictogram.getTitle(), button -> {
-                if (!screen.isEditable) {
+                if (!screen.holder.isEditable()) {
                     return;
                 }
                 var pictograms = screen.data.pictograms();

@@ -5,6 +5,7 @@ import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.screen.HazardScreen;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.item.PanelItem;
+import com.acikek.hdiamond.network.HDNetworking;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -146,7 +147,18 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
         return getDataTracker().get(HAZARD_DATA);
     }
 
+    @Override
+    public boolean isEditable() {
+        return !isWaxed();
+    }
+
+    @Override
     public void updateHazardData(HazardData data) {
+        HDNetworking.c2sUpdatePanelData(this, data);
+    }
+
+    @Override
+    public void setHazardData(HazardData data) {
         if (isWaxed()) {
             return;
         }

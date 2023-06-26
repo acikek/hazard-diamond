@@ -1,20 +1,18 @@
 package com.acikek.hdiamond.client.screen;
 
-import com.acikek.hdiamond.api.event.HazardScreenEdited;
+import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.client.HDiamondClient;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.core.section.DiamondSection;
-import com.acikek.hdiamond.entity.PanelEntity;
-import com.acikek.hdiamond.network.HDNetworking;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+
+import java.util.Objects;
 
 public class HazardScreen extends Screen {
 
@@ -22,31 +20,14 @@ public class HazardScreen extends Screen {
     public int y;
     public boolean movedCursor = false;
 
-    public PanelEntity entity;
-    public boolean isEditable;
-    public HazardData originalData;
-    public Identifier id;
+    public HazardDataHolder holder;
     public HazardData data;
 
-    HazardScreen(PanelEntity entity, boolean isEditable, HazardData originalData, Identifier id, HazardData data) {
+    public HazardScreen(HazardDataHolder holder) {
         super(Text.translatable("gui.hdiamond.hazard_screen.title"));
-        this.entity = entity;
-        this.isEditable = isEditable;
-        this.originalData = originalData;
-        this.id = id;
-        this.data = data;
-    }
-
-    public HazardScreen(PanelEntity entity) {
-        this(entity, !entity.isWaxed(), null, null, entity.getHazardData().copy());
-    }
-
-    public HazardScreen(HazardData data) {
-        this(null, false, null, null, data);
-    }
-
-    public HazardScreen(HazardData data, Identifier id) {
-        this(null, true, data.copy(), id, data);
+        this.holder = holder;
+        Objects.requireNonNull(holder.getHazardData());
+        data = holder.getHazardData().copy();
     }
 
     public void addQuadrant(QuadrantValue<?> quadrant, int halfX, int halfY) {
@@ -126,11 +107,14 @@ public class HazardScreen extends Screen {
 
     @Override
     public void close() {
-        if (entity != null) {
+        /*if (entity != null) {
             HDNetworking.c2sUpdatePanelData(entity, data);
         }
         else if (originalData != null) {
             HazardScreenEdited.EVENT.invoker().onEdit(MinecraftClient.getInstance().player, originalData, data, id);
+        }*/
+        if (holder.isEditable()) {
+            holder.updateHazardData(data);
         }
         super.close();
     }

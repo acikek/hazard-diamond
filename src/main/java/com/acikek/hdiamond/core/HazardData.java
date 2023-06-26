@@ -1,6 +1,5 @@
 package com.acikek.hdiamond.core;
 
-import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.google.gson.JsonObject;
@@ -11,21 +10,15 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.JsonHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) implements HazardDataHolder {
+public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
 
     public static final TrackedDataHandler<HazardData> DATA_TRACKER = TrackedDataHandler.of(
             (buf, data) -> data.write(buf),
             HazardData::read
     );
-
-    @Override
-    public @NotNull HazardData getHazardData() {
-        return this;
-    }
 
     public static HazardData empty() {
         return new HazardData(HazardDiamond.empty(), new HashSet<>());

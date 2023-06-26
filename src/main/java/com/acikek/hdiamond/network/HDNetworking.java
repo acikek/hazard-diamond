@@ -30,9 +30,9 @@ public class HDNetworking {
         ClientPlayNetworking.send(UPDATE_PANEL, buf);
     }
 
-    public static void s2cOpenScreen(Collection<ServerPlayerEntity> players, HazardDataHolder holder) {
+    public static void s2cOpenScreen(Collection<ServerPlayerEntity> players, HazardData data) {
         PacketByteBuf buf = PacketByteBufs.create();
-        holder.getHazardData().write(buf);
+        data.write(buf);
         for (var player : players) {
             ServerPlayNetworking.send(player, OPEN_SCREEN, buf);
         }
@@ -45,7 +45,7 @@ public class HDNetworking {
             server.execute(() -> {
                 Entity entity = player.getWorld().getEntityById(id);
                 if (entity instanceof PanelEntity panelEntity) {
-                    panelEntity.updateHazardData(data);
+                    panelEntity.setHazardData(data);
                 }
             });
         });
