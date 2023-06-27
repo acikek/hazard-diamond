@@ -6,11 +6,14 @@ import com.google.gson.JsonPrimitive;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Pair;
 import org.apache.commons.lang3.EnumUtils;
 
 public interface QuadrantSection<E extends Enum<E>> extends DiamondSection<E> {
 
     Formatting getTypeColor();
+
+    Pair<Integer, Integer> getScreenOffsets();
 
     private MutableText getTypeName() {
         return getText("type").formatted(getTypeColor());

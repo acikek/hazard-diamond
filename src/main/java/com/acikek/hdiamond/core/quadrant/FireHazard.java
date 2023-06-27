@@ -2,6 +2,7 @@ package com.acikek.hdiamond.core.quadrant;
 
 import com.acikek.hdiamond.core.section.QuadrantSection;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Pair;
 
 /**
  * Describes the susceptibility of materials to burn.<br>
@@ -54,5 +55,10 @@ public enum FireHazard implements QuadrantSection<FireHazard> {
     @Override
     public Formatting getTypeColor() {
         return Formatting.RED;
+    }
+
+    @Override
+    public Pair<Integer, Integer> getScreenOffsets() {
+        return new Pair<>(16, -50);
     }
 }

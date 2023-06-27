@@ -41,8 +41,8 @@ public abstract class DiamondWidget extends ButtonWidget {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        hovered = isMouseOver(mouseX, mouseY);
-        if (hovered) {
+        if (isFocused()) {
+            setActive();
             renderTooltip(context, mouseX, mouseY);
         }
     }
@@ -79,6 +79,8 @@ public abstract class DiamondWidget extends ButtonWidget {
         MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
     }
 
+    public abstract void setActive();
+
     public static class Quadrant extends DiamondWidget {
 
         public QuadrantValue<?> quadrant;
@@ -97,6 +99,11 @@ public abstract class DiamondWidget extends ButtonWidget {
         public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
             super.renderTooltip(context, mouseX, mouseY);
             renderDiamondTooltip(quadrant.get(), context, mouseX, mouseY, false);
+        }
+
+        @Override
+        public void setActive() {
+            screen.activeSection = quadrant.get();
         }
     }
 
@@ -125,6 +132,11 @@ public abstract class DiamondWidget extends ButtonWidget {
         public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
             super.renderTooltip(context, mouseX, mouseY);
             renderDiamondTooltip(pictogram, context, mouseX, mouseY, !screen.data.pictograms().contains(pictogram));
+        }
+
+        @Override
+        public void setActive() {
+            screen.activeSection = pictogram;
         }
     }
 }

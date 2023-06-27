@@ -4,6 +4,7 @@ import com.acikek.hdiamond.core.section.QuadrantSection;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Pair;
 
 /**
  * Describes special hazards pertaining to a material.
@@ -79,5 +80,10 @@ public enum SpecificHazard implements QuadrantSection<SpecificHazard> {
             case SIMPLE_ASPHYXIANT -> Formatting.GOLD;
             case RADIOACTIVE -> Formatting.DARK_GREEN;
         };
+    }
+
+    @Override
+    public Pair<Integer, Integer> getScreenOffsets() {
+        return new Pair<>(16, -18);
     }
 }
