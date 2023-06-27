@@ -47,14 +47,16 @@ public abstract class DiamondWidget extends ButtonWidget {
         if (isFocused()) {
             setActive(screen.nav);
             if (screen.mouse.isEmpty()) {
-                renderTooltip(context, 10, 20);
+                renderTooltip(context, 10, 30);
             }
         }
         if (isHovered()) {
             if (screen.holder.isEditable()) {
                 setActive(screen.mouse);
             }
-            renderTooltip(context, mouseX, mouseY);
+            if (screen.movedCursor) {
+                renderTooltip(context, mouseX, mouseY);
+            }
             wasHovered = true;
         }
         else if (wasHovered) {
@@ -66,9 +68,6 @@ public abstract class DiamondWidget extends ButtonWidget {
     }
 
     public void renderDiamondTooltip(DiamondSection<?> section, DrawContext context, int mouseX, int mouseY, boolean off) {
-        if (!screen.movedCursor) {
-            return;
-        }
         List<Text> tooltip = new ArrayList<>();
         tooltip.add(section.getTitle().styled(style -> off ? style.withFormatting(Formatting.GRAY) : style));
         tooltip.add(section.getDescription().formatted(off ? Formatting.DARK_GRAY : Formatting.GRAY));
