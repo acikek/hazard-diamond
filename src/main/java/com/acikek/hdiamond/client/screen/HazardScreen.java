@@ -7,7 +7,6 @@ import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.core.section.DiamondSection;
-import com.acikek.hdiamond.core.section.QuadrantSection;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -24,13 +23,42 @@ public class HazardScreen extends Screen {
     public HazardDataHolder holder;
     public HazardData data;
 
-    public DiamondSection<?> activeSection;
+    public static class ActiveSection {
+
+        public Pictogram pictogram;
+        public QuadrantValue<?> quadrant;
+
+        public void setPictogram(Pictogram pictogram) {
+            this.pictogram = pictogram;
+            quadrant = null;
+        }
+
+        public void setQuadrant(QuadrantValue<?> quadrant) {
+            this.quadrant = quadrant;
+            pictogram = null;
+        }
+
+        public boolean isEmpty() {
+            return pictogram == null && quadrant == null;
+        }
+    }
+
+    public ActiveSection nav = new ActiveSection();
+    public ActiveSection mouse = new ActiveSection();
 
     public HazardScreen(HazardDataHolder holder) {
         super(Text.translatable("gui.hdiamond.hazard_screen.title"));
         this.holder = holder;
         Objects.requireNonNull(holder.getHazardData());
         data = holder.getHazardData().copy();
+    }
+
+    public boolean isPictogramActive(Pictogram pictogram) {
+        return nav.pictogram == pictogram || mouse.pictogram == pictogram;
+    }
+
+    public boolean isQuadrantActive(QuadrantValue<?> quadrant) {
+        return nav.quadrant == quadrant || mouse.quadrant == quadrant;
     }
 
     public void addQuadrant(QuadrantValue<?> quadrant) {
@@ -70,30 +98,30 @@ public class HazardScreen extends Screen {
         context.drawTexture(HDiamondClient.WIDGETS, x, y, texture.u(), texture.v(), texture.width(), texture.height());
     }
 
-    public void renderQuadrant(DrawContext context, QuadrantSection<?> quadrant, int x, int y, boolean inside) {
+    public void renderQuadrant(DrawContext context, QuadrantValue<?> quadrant, int x, int y, boolean inside) {
         if (inside) {
-            renderElement(context, quadrant, x, y);
+            renderElement(context, quadrant.get(), x, y);
         }
-        if (quadrant == activeSection) {
-            var offsets = quadrant.getScreenOffsets();
+        if (isQuadrantActive(quadrant)) {
+            var offsets = quadrant.get().getScreenOffsets();
             renderSelection(context, this.x + offsets.getLeft(), this.y + offsets.getRight());
         }
     }
 
     public void renderQuadrants(DrawContext context) {
-        renderQuadrant(context, data.diamond().fire().get(), x + 26, y - 41, true);
-        renderQuadrant(context, data.diamond().health().get(), x + 10, y - 25, true);
-        renderQuadrant(context, data.diamond().reactivity().get(), x + 42, y - 25, true);
-        SpecificHazard specific = data.diamond().specific().get();
-        var rad = specific == SpecificHazard.RADIOACTIVE;
-        renderQuadrant(context, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0), specific != SpecificHazard.NONE);
+        renderQuadrant(context, data.diamond().fire(), x + 26, y - 41, true);
+        renderQuadrant(context, data.diamond().health(), x + 10, y - 25, true);
+        renderQuadrant(context, data.diamond().reactivity(), x + 42, y - 25, true);
+        var specific = data.diamond().specific();
+        var rad = specific.get() == SpecificHazard.RADIOACTIVE;
+        renderQuadrant(context, specific, x + 23 - (rad ? 1 : 0), y - 9 - (rad ? 2 : 0), specific.get() != SpecificHazard.NONE);
     }
 
     public void renderPictogram(DrawContext context, Pictogram pictogram, int x, int y) {
         float color = data.pictograms().contains(pictogram) ? 1.0f : 0.5f;
         RenderSystem.setShaderColor(color, color, color, 1.0f);
         renderElement(context, pictogram, x, y);
-        if (pictogram == activeSection) {
+        if (isPictogramActive(pictogram)) {
             renderSelection(context, x, y);
         }
     }

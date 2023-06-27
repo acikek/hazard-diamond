@@ -21,6 +21,8 @@ public abstract class DiamondWidget extends ButtonWidget {
     public HazardScreen screen;
     public Polygon diamond;
 
+    public boolean wasHovered;
+
     public DiamondWidget(HazardScreen screen, int x, int y, int width, int height, Text message, PressAction action) {
         super(x, y, width, height, message, action, ButtonWidget.DEFAULT_NARRATION_SUPPLIER);
         this.screen = screen;
@@ -35,15 +37,31 @@ public abstract class DiamondWidget extends ButtonWidget {
         this(screen, (halfX * 2) + 1, (halfY * 2) + 1, size, size, message, action);
     }
 
-    public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
+    public void renderTooltip(DrawContext context, int x, int y) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        hovered = isMouseOver(mouseX, mouseY);
         if (isFocused()) {
-            setActive();
+            setActive(screen.nav);
+            if (screen.mouse.isEmpty()) {
+                renderTooltip(context, 10, 20);
+            }
+        }
+        if (isHovered()) {
+            if (screen.holder.isEditable()) {
+                setActive(screen.mouse);
+            }
             renderTooltip(context, mouseX, mouseY);
+            wasHovered = true;
+        }
+        else if (wasHovered) {
+            setInactive(screen.mouse);
+            setInactive(screen.nav);
+            setFocused(false);
+            wasHovered = false;
         }
     }
 
@@ -79,7 +97,9 @@ public abstract class DiamondWidget extends ButtonWidget {
         MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0f));
     }
 
-    public abstract void setActive();
+    public abstract void setActive(HazardScreen.ActiveSection section);
+
+    public abstract void setInactive(HazardScreen.ActiveSection section);
 
     public static class Quadrant extends DiamondWidget {
 
@@ -96,14 +116,19 @@ public abstract class DiamondWidget extends ButtonWidget {
         }
 
         @Override
-        public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
-            super.renderTooltip(context, mouseX, mouseY);
-            renderDiamondTooltip(quadrant.get(), context, mouseX, mouseY, false);
+        public void renderTooltip(DrawContext context, int x, int y) {
+            super.renderTooltip(context, x, y);
+            renderDiamondTooltip(quadrant.get(), context, x, y, false);
         }
 
         @Override
-        public void setActive() {
-            screen.activeSection = quadrant.get();
+        public void setActive(HazardScreen.ActiveSection section) {
+            section.setQuadrant(quadrant);
+        }
+
+        @Override
+        public void setInactive(HazardScreen.ActiveSection section) {
+            section.setQuadrant(null);
         }
     }
 
@@ -129,14 +154,19 @@ public abstract class DiamondWidget extends ButtonWidget {
         }
 
         @Override
-        public void renderTooltip(DrawContext context, int mouseX, int mouseY) {
-            super.renderTooltip(context, mouseX, mouseY);
-            renderDiamondTooltip(pictogram, context, mouseX, mouseY, !screen.data.pictograms().contains(pictogram));
+        public void renderTooltip(DrawContext context, int x, int y) {
+            super.renderTooltip(context, x, y);
+            renderDiamondTooltip(pictogram, context, x, y, !screen.data.pictograms().contains(pictogram));
         }
 
         @Override
-        public void setActive() {
-            screen.activeSection = pictogram;
+        public void setActive(HazardScreen.ActiveSection section) {
+            section.setPictogram(pictogram);
+        }
+
+        @Override
+        public void setInactive(HazardScreen.ActiveSection section) {
+            section.setPictogram(null);
         }
     }
 }
