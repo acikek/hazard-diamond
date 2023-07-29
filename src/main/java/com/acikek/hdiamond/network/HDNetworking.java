@@ -33,12 +33,10 @@ public class HDNetworking {
         ClientPlayNetworking.send(UPDATE_PANEL, createUpdatePacket(entity, data));
     }
 
-    public static void s2cUpdatePanelData(Collection<ServerPlayerEntity> players, ServerPlayerEntity broadcaster, PanelEntity entity, HazardData data) {
-        var buf = createUpdatePacket(entity, data);
+    public static void s2cUpdatePanelData(Collection<ServerPlayerEntity> players, PanelEntity entity) {
+        var buf = createUpdatePacket(entity, entity.getHazardData());
         for (var player : players) {
-            if (player != broadcaster) {
-                ServerPlayNetworking.send(player, UPDATE_PANEL, buf);
-            }
+            ServerPlayNetworking.send(player, UPDATE_PANEL, buf);
         }
     }
 

@@ -43,6 +43,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.List;
+
 public class PanelEntity extends AbstractDecorationEntity implements HazardDataHolder {
 
     public static EntityType<PanelEntity> ENTITY_TYPE;
@@ -110,14 +113,23 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     }
 
     private void sync(ServerPlayerEntity broadcaster) {
-        var players = PlayerLookup.tracking(this);
-        HDNetworking.s2cUpdatePanelData(players, broadcaster, this, this.data);
+        var players = new HashSet<>(PlayerLookup.tracking(this));
+        if (broadcaster != null) {
+            players.remove(broadcaster);
+        }
+        HDNetworking.s2cUpdatePanelData(players, this);
     }
 
     @Override
     public void onPlace() {
         playSound(SoundEvents.BLOCK_NETHERITE_BLOCK_PLACE, 1.0f, 1.0f);
         sync(null);
+    }
+
+    @Override
+    public void onStartedTrackingBy(ServerPlayerEntity player) {
+        super.onStartedTrackingBy(player);
+        HDNetworking.s2cUpdatePanelData(List.of(player), this);
     }
 
     @Override
