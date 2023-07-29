@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -38,6 +39,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.GameMode;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -91,6 +93,15 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
             openScreen();
         }
         return ActionResult.success(getWorld().isClient());
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource damageSource) {
+        if (super.isInvulnerableTo(damageSource)) {
+            return true;
+        }
+        return damageSource.getSource() instanceof ServerPlayerEntity player
+                && player.interactionManager.getGameMode() == GameMode.ADVENTURE;
     }
 
     @Override
