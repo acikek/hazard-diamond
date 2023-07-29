@@ -8,6 +8,8 @@ import com.acikek.hdiamond.item.PanelItem;
 import com.acikek.hdiamond.network.HDNetworking;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AbstractRedstoneGateBlock;
@@ -45,8 +47,8 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
 
     public static EntityType<PanelEntity> ENTITY_TYPE;
 
-    public static final TrackedData<Boolean> WAXED = DataTracker.registerData(PanelEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    public static final TrackedData<HazardData> HAZARD_DATA = DataTracker.registerData(PanelEntity.class, HazardData.DATA_TRACKER);
+    private boolean waxed = false;
+    private HazardData data = HazardData.empty();
 
     public PanelEntity(EntityType<PanelEntity> entityType, World world) {
         super(entityType, world);
@@ -56,12 +58,6 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
         super(ENTITY_TYPE, world, pos);
         setFacing(direction);
         setPosition(pos.getX(), pos.getY(), pos.getZ());
-    }
-
-    @Override
-    protected void initDataTracker() {
-        getDataTracker().startTracking(WAXED, false);
-        getDataTracker().startTracking(HAZARD_DATA, HazardData.empty());
     }
 
     @Environment(EnvType.CLIENT)
@@ -86,7 +82,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
                 Criteria.ITEM_USED_ON_BLOCK.trigger(serverPlayer, getBlockPos(), stack);
             }
             playSound(SoundEvents.ITEM_HONEYCOMB_WAX_ON, 1.0f, 1.0f);
-            getDataTracker().set(WAXED, true);
+            waxed = true;
         }
         else if (getWorld().isClient()) {
             openScreen();
@@ -113,9 +109,15 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
         playSound(SoundEvents.ENTITY_PAINTING_BREAK, 1.0f, 1.0f);
     }
 
+    private void sync(ServerPlayerEntity broadcaster) {
+        var players = PlayerLookup.tracking(this);
+        HDNetworking.s2cUpdatePanelData(players, broadcaster, this, this.data);
+    }
+
     @Override
     public void onPlace() {
         playSound(SoundEvents.BLOCK_NETHERITE_BLOCK_PLACE, 1.0f, 1.0f);
+        sync(null);
     }
 
     @Override
@@ -139,12 +141,12 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     }
 
     public boolean isWaxed() {
-        return getDataTracker().get(WAXED);
+        return waxed;
     }
 
     @Override
     public @NotNull HazardData getHazardData() {
-        return getDataTracker().get(HAZARD_DATA);
+        return data;
     }
 
     @Override
@@ -154,17 +156,19 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
 
     @Override
     public void updateHazardData(HazardData data) {
+        this.data = data;
         HDNetworking.c2sUpdatePanelData(this, data);
     }
 
     @Override
-    public void setHazardData(HazardData data) {
-        if (isWaxed()) {
+    public void setHazardData(HazardData data, ServerPlayerEntity broadcaster) {
+        if (isWaxed() || getHazardData().equals(data)) {
             return;
         }
-        if (!getHazardData().equals(data)) {
-            getDataTracker().set(HAZARD_DATA, data);
+        this.data = data;
+        if (broadcaster != null) {
             playSound(SoundEvents.BLOCK_SMITHING_TABLE_USE, 1.0f, 1.0f);
+            sync(broadcaster);
         }
     }
 
@@ -189,8 +193,8 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        getDataTracker().set(WAXED, nbt.getBoolean("Waxed"));
-        getDataTracker().set(HAZARD_DATA, HazardData.fromNbt(nbt.getCompound("HazardData")));
+        waxed = nbt.getBoolean("Waxed");
+        data = HazardData.fromNbt(nbt.getCompound("HazardData"));
         facing = Direction.byId(nbt.getByte("Facing"));
     }
 

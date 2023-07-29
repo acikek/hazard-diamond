@@ -44,16 +44,16 @@ public class PanelItem extends Item {
             EntityType.loadFromEntityNbt(world, player, panelEntity, nbt);
             if (nbt.contains("HazardData")) {
                 var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
-                panelEntity.getDataTracker().set(PanelEntity.HAZARD_DATA, data);
+                panelEntity.setHazardData(data);
             }
         }
         if (!panelEntity.canStayAttached()) {
             return ActionResult.CONSUME;
         }
         if (!world.isClient()) {
-            panelEntity.onPlace();
             world.emitGameEvent(player, GameEvent.ENTITY_PLACE, panelEntity.getBlockPos());
             world.spawnEntity(panelEntity);
+            panelEntity.onPlace();
         }
         if (player != null && !player.isCreative()) {
             context.getStack().decrement(1);

@@ -4,6 +4,8 @@ import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.core.HazardData;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +31,7 @@ public record HazardScreenData(Identifier id, HazardData data) implements Hazard
     }
 
     @Override
-    public void setHazardData(HazardData data) {
-        // No-op
+    public void setHazardData(HazardData data, ServerPlayerEntity broadcaster) {
+        throw new UnsupportedOperationException();
     }
 }

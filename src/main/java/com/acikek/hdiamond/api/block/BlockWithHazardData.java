@@ -6,6 +6,7 @@ import com.acikek.hdiamond.core.HazardData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -14,7 +15,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A block base that, when interacted with, displays immutable {@link HazardData}.
+ * A block base that, when interacted with, displays <b>immutable</b> {@link HazardData}.
  */
 public class BlockWithHazardData extends Block implements HazardDataHolder {
 
@@ -37,12 +38,12 @@ public class BlockWithHazardData extends Block implements HazardDataHolder {
 
     @Override
     public void updateHazardData(HazardData data) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setHazardData(HazardData data) {
-
+    public void setHazardData(HazardData data, ServerPlayerEntity broadcaster) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
