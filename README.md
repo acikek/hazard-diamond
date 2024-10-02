@@ -9,7 +9,7 @@
 ---
 
 <p align="center">
-  <img src="https://cdn.discordapp.com/attachments/1103546491265626112/1105311204999708733/hdbanner.png" width="60%"/>
+  <img src="https://raw.githubusercontent.com/acikek/hazard-diamond/refs/heads/1.20/banner.png" width="60%"/>
 </p>
 
 ---
