@@ -135,7 +135,7 @@ public class HazardScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
+        renderBackgroundTexture(context);
         context.getMatrices().push();
         context.getMatrices().scale(2.0f, 2.0f, 1.0f);
         renderPanel(context);

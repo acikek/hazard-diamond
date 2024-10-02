@@ -5,7 +5,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 
 /**
- * Describes the susceptibiltiy of a material to release energy.<br>
+ * Describes the susceptibility of a material to release energy.<br>
  * Source: NFPA, <em>Fire Protection on Hazardous Materials</em>, Standard 704, 1990
  */
 public enum Reactivity implements QuadrantSection<Reactivity> {

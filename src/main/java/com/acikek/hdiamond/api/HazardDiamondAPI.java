@@ -219,7 +219,7 @@ public class HazardDiamondAPI {
      */
     public static void appendWailaServerData(NbtCompound nbt, HazardData data) {
         var tooltips = data.getTooltip().stream()
-                .map(Text.Serializer::toJson)
+                .map(Text.Serialization::toJsonString)
                 .toList();
         nbt.putString("WNumerals", tooltips.get(0));
         nbt.putString("WPictograms", tooltips.get(1));
@@ -233,7 +233,7 @@ public class HazardDiamondAPI {
         if (!nbt.contains("WNumerals")) {
             return;
         }
-        lineAdder.accept(Text.Serializer.fromJson(nbt.getString("WNumerals")));
-        lineAdder.accept(Text.Serializer.fromJson(nbt.getString("WPictograms")));
+        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WNumerals")));
+        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WPictograms")));
     }
 }

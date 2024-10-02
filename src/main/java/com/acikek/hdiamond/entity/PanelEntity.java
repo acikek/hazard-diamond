@@ -225,9 +225,9 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
         ENTITY_TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
                 HDiamond.id("panel"),
-                FabricEntityTypeBuilder.<PanelEntity>create(SpawnGroup.MISC, PanelEntity::new)
-                        .dimensions(EntityDimensions.fixed(1.0f, 1.0f))
-                        .trackedUpdateRate(Integer.MAX_VALUE)
+                EntityType.Builder.<PanelEntity>create(PanelEntity::new, SpawnGroup.MISC)
+                        .setDimensions(1.0f, 1.0f)
+                        .trackingTickInterval(Integer.MAX_VALUE)
                         .build()
         );
     }

@@ -17,10 +17,13 @@ repositories {
     }
 
     maven {
-        url "https://maven.terraformersmc.com"
-        content {
-            includeGroup "com.terraformersmc"
-        }
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/"
+    }
+
+    maven {
+        name = "Nucleoid"
+        url = "https://maven.nucleoid.xyz/"
     }
 
     mavenCentral()
@@ -43,10 +46,12 @@ dependencies {
     modRuntimeOnly "lol.bai:badpackets:fabric-0.2.0"
 
     // YetAnotherConfigLib
-    modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 
     // ModMenu
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    modCompileOnly "eu.pb4:placeholder-api:${project.papi_version}"
 }
 
 loom {

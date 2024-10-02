@@ -4,7 +4,6 @@ import com.acikek.hdiamond.api.event.HazardScreenEdited;
 import com.acikek.hdiamond.api.util.HazardDataHolder;
 import com.acikek.hdiamond.core.HazardData;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;

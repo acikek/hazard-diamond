@@ -6,8 +6,7 @@ import com.acikek.hdiamond.core.HazardDiamond;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.core.section.DiamondSection;
 import com.acikek.hdiamond.entity.PanelEntity;
-import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
@@ -69,7 +68,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
         modelRenderer.render(
                 matrices.peek(), vertexConsumers.getBuffer(RenderLayer.getCutout()),
-                null, BakedModelManagerHelper.getModel(modelManager, PANEL_MODEL),
+                null, modelManager.getModel(PANEL_MODEL),
                 1.0f, 1.0f, 1.0f, lightFront, OverlayTexture.DEFAULT_UV
         );
     }
@@ -120,6 +119,6 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
 
     public static void register() {
         EntityRendererRegistry.register(PanelEntity.ENTITY_TYPE, PanelEntityRenderer::new);
-        ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> out.accept(PANEL_MODEL));
+        ModelLoadingPlugin.register(pluginContext -> pluginContext.addModels(PANEL_MODEL));
     }
 }

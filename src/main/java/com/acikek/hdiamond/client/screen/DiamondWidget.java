@@ -42,7 +42,7 @@ public abstract class DiamondWidget extends ButtonWidget {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         hovered = isMouseOver(mouseX, mouseY);
         if (isFocused()) {
             setActive(screen.nav);
