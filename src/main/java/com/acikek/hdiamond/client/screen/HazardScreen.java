@@ -7,6 +7,7 @@ import com.acikek.hdiamond.core.pictogram.Pictogram;
 import com.acikek.hdiamond.core.quadrant.QuadrantValue;
 import com.acikek.hdiamond.core.quadrant.SpecificHazard;
 import com.acikek.hdiamond.core.section.DiamondSection;
+import com.acikek.hdiamond.mixin.client.ScreenAccessor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -142,7 +143,9 @@ public class HazardScreen extends Screen {
         renderQuadrants(context);
         renderPictograms(context);
         context.getMatrices().pop();
-        super.render(context, mouseX, mouseY, delta);
+        for (var drawable : ((ScreenAccessor) this).getDrawables()) {
+            drawable.render(context, mouseX, mouseY, delta);
+        }
     }
 
     @Override
