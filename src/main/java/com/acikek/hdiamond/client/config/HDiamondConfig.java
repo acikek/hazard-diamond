@@ -16,6 +16,7 @@ public class HDiamondConfig {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public boolean renderFull = true;
+    public boolean enableContent = true;
 
     public static Path file() {
         return FabricLoader.getInstance().getConfigDir().resolve(FILENAME);

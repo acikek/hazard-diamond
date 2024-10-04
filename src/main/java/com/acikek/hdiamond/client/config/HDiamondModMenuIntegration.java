@@ -8,26 +8,24 @@ import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 public class HDiamondModMenuIntegration implements ModMenuApi {
 
-    public static Binding<Boolean> RENDER_FULL = new Binding<>() {
+    public record ConfigBinding<T>(Supplier<T> value, Consumer<T> setter, T defaultValue) implements Binding<T> {
 
         @Override
-        public void setValue(Boolean value) {
-            HDiamondClient.config.renderFull = value;
+        public void setValue(T value) {
+            setter.accept(value);
             HDiamondClient.config.write();
         }
 
         @Override
-        public Boolean getValue() {
-            return HDiamondClient.config.renderFull;
+        public T getValue() {
+            return value.get();
         }
-
-        @Override
-        public Boolean defaultValue() {
-            return true;
-        }
-    };
+    }
 
     public YetAnotherConfigLib createConfig() {
         return YetAnotherConfigLib.createBuilder()
@@ -38,7 +36,14 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
                                 .name(Text.translatable("config.hdiamond.render_full.name"))
                                 .description(OptionDescription.of(Text.translatable("config.hdiamond.render_full.description")))
                                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
-                                .binding(RENDER_FULL)
+                                .binding(new ConfigBinding<>(() -> HDiamondClient.config.renderFull, value -> HDiamondClient.config.renderFull = value, true))
+                                .controller(TickBoxControllerBuilder::create)
+                                .build())
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Text.translatable("config.hdiamond.enable_content.name"))
+                                .description(OptionDescription.of(Text.translatable("config.hdiamond.enable_content.description")))
+                                .flag(OptionFlag.GAME_RESTART)
+                                .binding(new ConfigBinding<>(() -> HDiamondClient.config.enableContent, value -> HDiamondClient.config.enableContent = value, true))
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())
