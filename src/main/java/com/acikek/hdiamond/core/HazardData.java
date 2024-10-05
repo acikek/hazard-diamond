@@ -7,6 +7,8 @@ import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.JsonHelper;
@@ -15,10 +17,10 @@ import java.util.*;
 
 public record HazardData(HazardDiamond diamond, Set<Pictogram> pictograms) {
 
-    public static final TrackedDataHandler<HazardData> DATA_TRACKER = TrackedDataHandler.of(
-            (buf, data) -> data.write(buf),
-            HazardData::read
-    );
+    public static final PacketCodec<RegistryByteBuf, Set<Pictogram>> PICTOGRAMS_PACKET_CODEC = PacketCodec.ofStatic(Pictogram::write, Pictogram::read);
+    public static final PacketCodec<RegistryByteBuf, HazardData> PACKET_CODEC = PacketCodec.tuple(HazardDiamond.PACKET_CODEC, HazardData::diamond, PICTOGRAMS_PACKET_CODEC, HazardData::pictograms, HazardData::new);
+
+    public static final TrackedDataHandler<HazardData> DATA_TRACKER = TrackedDataHandler.create(PACKET_CODEC);
 
     public static HazardData empty() {
         return new HazardData(HazardDiamond.empty(), new HashSet<>());

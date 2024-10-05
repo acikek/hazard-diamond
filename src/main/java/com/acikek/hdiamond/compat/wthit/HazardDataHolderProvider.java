@@ -22,14 +22,14 @@ public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IB
     @Override
     public void appendBody(ITooltip tooltip, IEntityAccessor accessor, IPluginConfig config) {
         if (config.getBoolean(HDiamondWailaPlugin.ENTITY_INFO)) {
-            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), tooltip::addLine);
+            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), accessor.getWorld().getRegistryManager(), tooltip::addLine);
         }
     }
 
     @Override
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         if (config.getBoolean(HDiamondWailaPlugin.BLOCK_INFO)) {
-            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), tooltip::addLine);
+            HazardDiamondAPI.appendWailaTooltip(accessor.getData().raw(), accessor.getWorld().getRegistryManager(),  tooltip::addLine);
         }
     }
 
@@ -43,7 +43,7 @@ public class HazardDataHolderProvider<T> implements IEntityComponentProvider, IB
             if (hazardData.isEmpty()) {
                 return;
             }
-            HazardDiamondAPI.appendWailaServerData(data.raw(), hazardData);
+            HazardDiamondAPI.appendWailaServerData(data.raw(), accessor.getWorld().getRegistryManager(), hazardData);
         }
     }
 }

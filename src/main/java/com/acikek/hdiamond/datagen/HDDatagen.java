@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
@@ -20,7 +20,7 @@ public class HDDatagen implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         var pack = fabricDataGenerator.createPack();
 
-        pack.addProvider((output, $) -> new FabricRecipeProvider(output) {
+        pack.addProvider((output, wrapper) -> new FabricRecipeProvider(output, wrapper) {
             @Override
             public void generate(RecipeExporter exporter) {
                 ShapedRecipeJsonBuilder.create(RecipeCategory.DECORATIONS, PanelItem.INSTANCE, 4)

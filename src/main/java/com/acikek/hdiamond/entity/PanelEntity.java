@@ -15,6 +15,7 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AbstractRedstoneGateBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -200,7 +201,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     public ItemStack getPickBlockStack() {
         ItemStack stack = PanelItem.INSTANCE.getDefaultStack();
         if (!getHazardData().isEmpty()) {
-            stack.getOrCreateNbt().put("HazardData", getHazardData().toNbt());
+            stack.set(PanelItem.HAZARD_DATA_COMPONENT, NbtComponent.of(getHazardData().toNbt()));
         }
         return stack;
     }
@@ -229,7 +230,7 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
                 Registries.ENTITY_TYPE,
                 HDiamond.id("panel"),
                 EntityType.Builder.<PanelEntity>create(PanelEntity::new, SpawnGroup.MISC)
-                        .setDimensions(1.0f, 1.0f)
+                        .dimensions(1.0f, 1.0f)
                         .trackingTickInterval(Integer.MAX_VALUE)
                         .build()
         );

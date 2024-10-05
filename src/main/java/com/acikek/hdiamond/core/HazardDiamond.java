@@ -5,12 +5,16 @@ import com.acikek.hdiamond.core.section.QuadrantSection;
 import com.google.gson.JsonObject;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 
 public record HazardDiamond(
         QuadrantValue<FireHazard> fire,
         QuadrantValue<HealthHazard> health,
         QuadrantValue<Reactivity> reactivity,
         QuadrantValue<SpecificHazard> specific) {
+
+    public static final PacketCodec<RegistryByteBuf, HazardDiamond> PACKET_CODEC = PacketCodec.of(HazardDiamond::write, HazardDiamond::read);
 
     public static HazardDiamond empty() {
         return new HazardDiamond(FireHazard.NONFLAMMABLE, HealthHazard.NORMAL, Reactivity.STABLE, SpecificHazard.NONE);

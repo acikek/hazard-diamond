@@ -44,7 +44,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
             return;
         }
 
-        int lightFront = WorldRenderer.getLightmapCoordinates(entity.getWorld(), entity.getBlockPos());
+        int lightFront = getLight(entity, tickDelta);
 
         matrices.push();
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180 - entity.getYaw()));

@@ -3,13 +3,14 @@ package com.acikek.hdiamond.item;
 import com.acikek.hdiamond.HDiamond;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.entity.PanelEntity;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
@@ -18,12 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class PanelItem extends Item {
 
+    public static DataComponentType<NbtComponent> HAZARD_DATA_COMPONENT;
     public static PanelItem INSTANCE;
 
     public PanelItem(Settings settings) {
@@ -39,12 +40,12 @@ public class PanelItem extends Item {
             return ActionResult.FAIL;
         }
         var panelEntity = new PanelEntity(world, offset, context.getSide());
-        NbtCompound nbt = context.getStack().getNbt();
-        if (nbt != null) {
-            EntityType.loadFromEntityNbt(world, player, panelEntity, nbt);
-            if (nbt.contains("HazardData")) {
-                var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
-                panelEntity.setHazardData(data);
+        NbtComponent entityData = context.getStack().getOrDefault(DataComponentTypes.ENTITY_DATA, NbtComponent.DEFAULT);
+        if (entityData != null) {
+            EntityType.loadFromEntityNbt(world, player, panelEntity, entityData);
+            NbtComponent data = context.getStack().get(HAZARD_DATA_COMPONENT);
+            if (data != null) {
+                panelEntity.setHazardData(HazardData.fromNbt(data.copyNbt()));
             }
         }
         if (!panelEntity.canStayAttached()) {
@@ -66,22 +67,21 @@ public class PanelItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if (stack.hasNbt()) {
-            var nbt = stack.getOrCreateNbt();
-            if (nbt.contains("HazardData")) {
-                var data = HazardData.fromNbt(nbt.getCompound("HazardData"));
-                tooltip.addAll(data.getTooltip());
-            }
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+        NbtComponent nbt = stack.get(HAZARD_DATA_COMPONENT);
+        if (nbt != null) {
+            HazardData data = HazardData.fromNbt(nbt.copyNbt());
+            tooltip.addAll(data.getTooltip());
         }
-        super.appendTooltip(stack, world, tooltip, context);
+        super.appendTooltip(stack, context, tooltip, type);
     }
 
     public static void register() {
         if (!HDiamond.config.enableContent) {
             return;
         }
-        INSTANCE = Registry.register(Registries.ITEM, HDiamond.id("panel_item"), new PanelItem(new FabricItemSettings()));
+        HAZARD_DATA_COMPONENT = Registry.register(Registries.DATA_COMPONENT_TYPE, HDiamond.id("hazard_data"), DataComponentType.<NbtComponent>builder().codec(NbtComponent.CODEC).build()); // Bad. TODO: Fix!
+        INSTANCE = Registry.register(Registries.ITEM, HDiamond.id("panel_item"), new PanelItem(new Item.Settings()));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries ->
             entries.addAfter(Items.GLOW_ITEM_FRAME, INSTANCE)
         );

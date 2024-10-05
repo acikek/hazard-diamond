@@ -18,6 +18,7 @@ import mcp.mobius.waila.api.ITooltip;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -217,9 +218,9 @@ public class HazardDiamondAPI {
     /**
      * Appends {@code WAILA} data converted from the specified hazard data to the NBT compound.
      */
-    public static void appendWailaServerData(NbtCompound nbt, HazardData data) {
+    public static void appendWailaServerData(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup, HazardData data) {
         var tooltips = data.getTooltip().stream()
-                .map(Text.Serialization::toJsonString)
+                .map(text -> Text.Serialization.toJsonString(text, lookup))
                 .toList();
         nbt.putString("WNumerals", tooltips.get(0));
         nbt.putString("WPictograms", tooltips.get(1));
@@ -229,11 +230,11 @@ public class HazardDiamondAPI {
      * Fetches {@code WAILA} data from an NBT compound and appends the text lines in some way.
      * @param lineAdder a function such as {@link ITooltip#addLine(Text)}
      */
-    public static void appendWailaTooltip(NbtCompound nbt, Consumer<Text> lineAdder) {
+    public static void appendWailaTooltip(NbtCompound nbt, RegistryWrapper.WrapperLookup lookup, Consumer<Text> lineAdder) {
         if (!nbt.contains("WNumerals")) {
             return;
         }
-        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WNumerals")));
-        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WPictograms")));
+        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WNumerals"), lookup));
+        lineAdder.accept(Text.Serialization.fromJson(nbt.getString("WPictograms"), lookup));
     }
 }
