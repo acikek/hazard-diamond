@@ -53,7 +53,7 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
         renderPanel(matrices, vertexConsumers, lightFront);
         matrices.pop();
 
-        if (HDiamondClient.config.renderFull) {
+        if (HDiamond.config.renderFull) {
             matrices.push();
             renderIcons(entity.getHazardData().diamond(), matrices, vertexConsumers, lightFront);
             matrices.pop();
@@ -118,7 +118,9 @@ public class PanelEntityRenderer extends EntityRenderer<PanelEntity> {
     }
 
     public static void register() {
-        EntityRendererRegistry.register(PanelEntity.ENTITY_TYPE, PanelEntityRenderer::new);
-        ModelLoadingPlugin.register(pluginContext -> pluginContext.addModels(PANEL_MODEL));
+        if (HDiamond.config.enableContent) {
+            EntityRendererRegistry.register(PanelEntity.ENTITY_TYPE, PanelEntityRenderer::new);
+            ModelLoadingPlugin.register(pluginContext -> pluginContext.addModels(PANEL_MODEL));
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.acikek.hdiamond;
 
 import com.acikek.hdiamond.command.HDiamondCommand;
+import com.acikek.hdiamond.config.HDiamondConfig;
 import com.acikek.hdiamond.core.HazardData;
 import com.acikek.hdiamond.entity.PanelEntity;
 import com.acikek.hdiamond.item.PanelItem;
@@ -17,12 +18,15 @@ public class HDiamond implements ModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
+    public static HDiamondConfig config;
+
     public static Identifier id(String path) {
         return new Identifier(ID, path);
     }
 
     @Override
     public void onInitialize() {
+        config = HDiamondConfig.read();
         HazardData.register();
         PanelEntity.register();
         PanelItem.register();

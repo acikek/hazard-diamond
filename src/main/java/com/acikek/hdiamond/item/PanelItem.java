@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PanelItem extends Item {
 
-    public static final PanelItem INSTANCE = new PanelItem(new FabricItemSettings());
+    public static PanelItem INSTANCE;
 
     public PanelItem(Settings settings) {
         super(settings);
@@ -78,7 +78,10 @@ public class PanelItem extends Item {
     }
 
     public static void register() {
-        Registry.register(Registries.ITEM, HDiamond.id("panel_item"), INSTANCE);
+        if (!HDiamond.config.enableContent) {
+            return;
+        }
+        INSTANCE = Registry.register(Registries.ITEM, HDiamond.id("panel_item"), new PanelItem(new FabricItemSettings()));
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries ->
             entries.addAfter(Items.GLOW_ITEM_FRAME, INSTANCE)
         );

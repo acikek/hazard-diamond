@@ -1,6 +1,6 @@
 package com.acikek.hdiamond.client.config;
 
-import com.acikek.hdiamond.client.HDiamondClient;
+import com.acikek.hdiamond.HDiamond;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.isxander.yacl3.api.*;
@@ -18,7 +18,7 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
         @Override
         public void setValue(T value) {
             setter.accept(value);
-            HDiamondClient.config.write();
+            HDiamond.config.write();
         }
 
         @Override
@@ -36,14 +36,14 @@ public class HDiamondModMenuIntegration implements ModMenuApi {
                                 .name(Text.translatable("config.hdiamond.render_full.name"))
                                 .description(OptionDescription.of(Text.translatable("config.hdiamond.render_full.description")))
                                 .flag(OptionFlag.WORLD_RENDER_UPDATE)
-                                .binding(new ConfigBinding<>(() -> HDiamondClient.config.renderFull, value -> HDiamondClient.config.renderFull = value, true))
+                                .binding(new ConfigBinding<>(() -> HDiamond.config.renderFull, value -> HDiamond.config.renderFull = value, true))
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .option(Option.<Boolean>createBuilder()
                                 .name(Text.translatable("config.hdiamond.enable_content.name"))
                                 .description(OptionDescription.of(Text.translatable("config.hdiamond.enable_content.description")))
                                 .flag(OptionFlag.GAME_RESTART)
-                                .binding(new ConfigBinding<>(() -> HDiamondClient.config.enableContent, value -> HDiamondClient.config.enableContent = value, true))
+                                .binding(new ConfigBinding<>(() -> HDiamond.config.enableContent, value -> HDiamond.config.enableContent = value, true))
                                 .controller(TickBoxControllerBuilder::create)
                                 .build())
                         .build())

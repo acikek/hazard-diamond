@@ -1,4 +1,4 @@
-package com.acikek.hdiamond.client.config;
+package com.acikek.hdiamond.config;
 
 import com.acikek.hdiamond.HDiamond;
 import com.google.gson.Gson;
@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class HDiamondConfig {
-
 
     public static final String FILENAME = "hdiamond.json";
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

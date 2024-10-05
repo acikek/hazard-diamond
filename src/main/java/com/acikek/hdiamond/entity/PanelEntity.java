@@ -222,6 +222,9 @@ public class PanelEntity extends AbstractDecorationEntity implements HazardDataH
     }
 
     public static void register() {
+        if (!HDiamond.config.enableContent) {
+            return;
+        }
         ENTITY_TYPE = Registry.register(
                 Registries.ENTITY_TYPE,
                 HDiamond.id("panel"),

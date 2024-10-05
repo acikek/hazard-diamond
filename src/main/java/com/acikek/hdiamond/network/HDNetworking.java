@@ -49,6 +49,9 @@ public class HDNetworking {
     }
 
     public static void register() {
+        if (!HDiamond.config.enableContent) {
+            return;
+        }
         ServerPlayNetworking.registerGlobalReceiver(UPDATE_PANEL, (server, player, handler, buf, responseSender) -> {
             final int id = buf.readInt();
             final HazardData data = HazardData.read(buf);
@@ -63,16 +66,18 @@ public class HDNetworking {
 
     @Environment(EnvType.CLIENT)
     public static void registerClient() {
-        ClientPlayNetworking.registerGlobalReceiver(UPDATE_PANEL, (client, handler, buf, responseSender) -> {
-            final int id = buf.readInt();
-            final HazardData data = HazardData.read(buf);
-            client.execute(() -> {
-                Entity entity = client.world.getEntityById(id);
-                if (entity instanceof PanelEntity panelEntity) {
-                    panelEntity.setHazardData(data);
-                }
+        if (HDiamond.config.enableContent) {
+            ClientPlayNetworking.registerGlobalReceiver(UPDATE_PANEL, (client, handler, buf, responseSender) -> {
+                final int id = buf.readInt();
+                final HazardData data = HazardData.read(buf);
+                client.execute(() -> {
+                    Entity entity = client.world.getEntityById(id);
+                    if (entity instanceof PanelEntity panelEntity) {
+                        panelEntity.setHazardData(data);
+                    }
+                });
             });
-        });
+        }
         ClientPlayNetworking.registerGlobalReceiver(OPEN_SCREEN, (client, handler, buf, responseSender) -> {
             final HazardData data = HazardData.read(buf);
             client.execute(() -> HazardDiamondAPI.open(data));
